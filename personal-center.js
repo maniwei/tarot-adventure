@@ -33,16 +33,31 @@ function initPersonalCenter () {
     renderMaps();
     setupFoldAnimation();
     setupCheckDetailButtons();
+    if (modalClose) {
+        modalClose.addEventListener('click', closeCardModal);
+    }
 }
 
 // Setup fold icon animation
 function setupFoldAnimation() {
-    // Use event delegation to handle clicks on fold icons
+    // Use event delegation to handle clicks on fold icons and view-deep-btn
     const storyList = document.getElementById('unlockStorys');
     
     if (storyList) {
         storyList.addEventListener('click', function(e) {
-            togglePanel(e);
+            // Handle fold icon click
+            const foldIcon = e.target.closest('.fold-icon');
+            if (foldIcon) {
+                togglePanel(e);
+                return;
+            }
+            
+            // Handle view-deep-btn click
+            const viewDeepBtn = e.target.closest('.view-deep-btn');
+            if (viewDeepBtn) {
+                handleViewDeepStory(e);
+                return;
+            }
         });
     }
 }
@@ -64,6 +79,62 @@ function togglePanel (e) {
                 
                 // Toggle collapsed class on story content
                 storyContent.classList.toggle('collapsed');
+            }
+        }
+    }
+}
+
+// Handle view deep story button click
+function handleViewDeepStory(e) {
+    const viewDeepBtn = e.target.closest('.view-deep-btn');
+    
+    if (viewDeepBtn) {
+        // Get the parent story item
+        const storyItem = viewDeepBtn.closest('.unlcok-story-item');
+        
+        if (storyItem) {
+            const storyId = storyItem.dataset.id;
+            const storyContent = storyItem.querySelector('.story-item-content');
+            const storyDescElement = storyItem.querySelector('.story-item-desc');
+            const foldIcon = storyItem.querySelector('.fold-icon');
+            
+            // Get story data from localStorage
+            const storyKey = `${UNLOCK_KEY_PREFIX}deepStories_${storyId}`;
+            const storyData = JSON.parse(localStorage.getItem(storyKey) || '{}');
+            
+            if (!storyData || !storyData.story) {
+                console.warn('No story data found for story ID:', storyId);
+                return;
+            }
+            
+            // Check if content is already expanded
+            const isExpanded = storyContent && !storyContent.classList.contains('collapsed');
+            
+            if (isExpanded) {
+                // If already expanded, just refresh the story content
+                if (storyDescElement) {
+                    storyDescElement.innerHTML = storyData.story.replace(/\n/g, '<br>');
+                    
+                    // Add a visual feedback animation
+                    storyDescElement.style.transition = 'opacity 0.3s ease';
+                    storyDescElement.style.opacity = '0.5';
+                    setTimeout(() => {
+                        storyDescElement.style.opacity = '1';
+                    }, 300);
+                }
+            } else {
+                // If collapsed, expand the panel (same as fold-icon behavior)
+                if (storyContent) {
+                    storyContent.classList.remove('collapsed');
+                }
+                if (foldIcon) {
+                    foldIcon.classList.add('rotated');
+                }
+                
+                // Also update the story content when expanding
+                if (storyDescElement) {
+                    storyDescElement.innerHTML = storyData.story.replace(/\n/g, '<br>');
+                }
             }
         }
     }
@@ -209,6 +280,17 @@ function renderStorys () {
                     </div>
                     <ul class="unloack-story-cards">
                         ${storyData.drawnCards && storyData.drawnCards.length > 0 ? storyData.drawnCards.map((card, cardIdx) => {
+                            const isUnlocked = isContentUnlocked('cardStory', card.id);
+                            let buttonLabel = lang === 'zu' ? 'Hlola' : 'Check';
+                            let buttonClass = 'check-detail-btn';
+                            
+                            if (!isUnlocked) {
+                                buttonLabel = lang === 'zu' ? `Vula (3 💎)` : `Unlock (3 💎)`;
+                                buttonClass += ' paid-unlock';
+                            } else {
+                                buttonClass += ' unlocked';
+                            }
+                            
                             return `
                         <li class="card-slot empty ${card.isReversed ? 'reversed' : ''}" data-position="${positions[cardIdx]}" data-i18n-attr="data-position" data-position-en="${positions[cardIdx]}" data-position-zu="${positions[cardIdx]}">
                             <div class="card-content">
@@ -219,11 +301,12 @@ function renderStorys () {
                                     <p class="card-name">${card.name}</p>
                                 </div>
                             </div>
-                            <button class="check-detail-btn" 
+                            <button class="${buttonClass}" 
                                     data-card-id="${card.id}" 
                                     data-card-index="${cardIdx}"
-                                    data-story-id="${id}">
-                                Check
+                                    data-story-id="${id}"
+                                    ${isUnlocked ? '' : 'data-cost="3"'}>
+                                ${buttonLabel}
                             </button>
                         </li>
                             `;
@@ -315,32 +398,102 @@ function setupCheckDetailButtons() {
 
             const cardId = parseInt(this.dataset.cardId);
             const cardIndex = parseInt(this.dataset.cardIndex);
+            const storyId = this.dataset.storyId;
             
             // Find the card from tarotCards array
             const card = tarotCards.find(c => c.id === cardId);
             
-            if (card) {
-                // Get additional context from parent elements
-                const storyItem = this.closest('.unlcok-story-item');
-                const storyId = storyItem ? storyItem.dataset.id : null;
-                const cardSlot = this.closest('.card-slot');
-                const position = cardSlot ? cardSlot.dataset.position : '';
-                
-                // Get position name based on language
-                const positions = lang === 'zu' ? ['Isidlule', 'Samanje', 'Esizayo'] : ['Past', 'Present', 'Future'];
-                const positionName = positions[cardIndex] || position;
-                
-                // Basic template for story generation
-                const meanings = {
-                    upright: card.meaning || `${card.name} in its upright position brings messages of clarity and guidance.`,
-                    reversed: card.reversal || `${card.name} reversed suggests introspection and hidden layers.`
-                };
+            if (!card) {
+                console.warn('Card not found with id:', cardId);
+                return;
+            }
+            
+            // Check if content is unlocked
+            const isUnlocked = isContentUnlocked('cardStory', card.id);
+            
+            if (!isUnlocked) {
+                // Need to unlock - check crystals and purchase
+                handleUnlockCardStory(card, cardIndex, storyId, this);
+            } else {
+                // Already unlocked - display story
+                displayCardStoryInPersonalCenter(card, cardIndex, storyId);
+            }
+        });
+    });
+}
 
-                const meaning = card.isReversed ? meanings.reversed : meanings.upright;
-                const keywords = card.keywords || 'wisdom, growth, change';
+// Handle unlocking card story (purchase logic)
+function handleUnlockCardStory(card, cardIndex, storyId, buttonElement) {
+    const cost = 3;
+    const crystals = getCrystals ? getCrystals() : 0;
+    
+    if (crystals < cost) {
+        const msg = lang === 'zu' 
+            ? `❌ Udinga ${cost} amakristali. Unayo ${crystals}.\n💡 Thenga amakristali ukuze uvule leli khadi.`
+            : `❌ You need ${cost} crystals. You have ${crystals}.\n💡 Buy crystals to unlock this card's story.`;
+        alert(msg);
+        // Redirect to crystal shop or open modal
+        window.location.href = 'crystal-shop.html';
+        return;
+    }
+    
+    // Spend crystals
+    if (spendCrystals) {
+        const result = spendCrystals(cost);
+        if (!result || !result.success) {
+            const msg = lang === 'zu' 
+                ? `❌ Imali ayienele!`
+                : `❌ Insufficient crystals!`;
+            alert(msg);
+            return;
+        }
+    }
+    
+    // Unlock content
+    if (unlockContent) {
+        unlockContent('cardStory', card.id);
+    }
+    
+    // Update button appearance
+    const unlockedText = lang === 'zu' ? 'Hlola' : 'Check';
+    buttonElement.textContent = unlockedText;
+    buttonElement.classList.remove('paid-unlock');
+    buttonElement.classList.add('unlocked');
+    buttonElement.removeAttribute('data-cost');
+    
+    // Update crystal display
+    updateCrystalDisplay();
+    
+    // Show success message
+    const successMsg = lang === 'zu' 
+        ? `✅ Isikhulu sivuliwe! Amakristali ashiyiwe: ${getCrystals()}`
+        : `✅ Card story unlocked! Crystals remaining: ${getCrystals()}`;
+    console.log(successMsg);
+    
+    // Re-render the unlocked cards list to include the newly unlocked card
+    renderCards();
+    
+    // Display the story immediately after unlocking
+    displayCardStoryInPersonalCenter(card, cardIndex, storyId);
+}
 
-                // Generate story content
-                const story = `
+// Display card story in personal center
+function displayCardStoryInPersonalCenter(card, cardIndex, storyId) {
+    // Get position name based on language
+    const positions = lang === 'zu' ? ['Isidlule', 'Samanje', 'Esizayo'] : ['Past', 'Present', 'Future'];
+    const positionName = positions[cardIndex] || '';
+    
+    // Basic template for story generation
+    const meanings = {
+        upright: card.meaning || `${card.name} in its upright position brings messages of clarity and guidance.`,
+        reversed: card.reversal || `${card.name} reversed suggests introspection and hidden layers.`
+    };
+
+    const meaning = card.isReversed ? meanings.reversed : meanings.upright;
+    const keywords = card.keywords || 'wisdom, growth, change';
+
+    // Generate story content
+    const story = `
 🔮 **${card.name}** — Position: ${positionName}
 ${card.isReversed ? '(Reversed)' : '(Upright)'}
 
@@ -355,22 +508,28 @@ The wisdom here is not about predicting the future, but about recognizing patter
 Remember, every card is a mirror reflecting both your inner world and the circumstances around you. Trust your intuition, and let this reading be a compass for your next steps.
 
 May you find the clarity and peace you seek.
-                `;
-                
-                // Find the story-item-desc element within the same story item
-                const storyDescElement = storyItem ? storyItem.querySelector('.story-item-desc') : null;
-                
-                if (storyDescElement) {
-                    // Render the story content, converting newlines to <br> tags
-                    storyDescElement.innerHTML = story.trim().replace(/\n/g, '<br>');
-                } else {
-                    console.warn('Story description element not found');
-                }
-            } else {
-                console.warn('Card not found with id:', cardId);
-            }
-        });
-    });
+    `;
+    
+    // Find the story-item-desc element within the same story item
+    const storyItem = document.querySelector(`.unlcok-story-item[data-id="${storyId}"]`);
+    const storyDescElement = storyItem ? storyItem.querySelector('.story-item-desc') : null;
+    
+    if (storyDescElement) {
+        // Render the story content, converting newlines to <br> tags
+        storyDescElement.innerHTML = story.trim().replace(/\n/g, '<br>');
+        
+        // Make sure the story content is visible (expand if collapsed)
+        // const storyContent = storyItem.querySelector('.story-item-content');
+        // if (storyContent && storyContent.classList.contains('collapsed')) {
+        //     storyContent.classList.remove('collapsed');
+        //     const foldIcon = storyItem.querySelector('.fold-icon');
+        //     if (foldIcon) {
+        //         foldIcon.classList.add('rotated');
+        //     }
+        // }
+    } else {
+        console.warn('Story description element not found');
+    }
 }
 
 // Initialize on load
