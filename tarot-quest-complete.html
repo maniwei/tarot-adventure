@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarot Quest - Interactive Adventure</title>
+    <style>
+        /* ==================== CSS Variables - Deep Blue & Silver Theme ==================== */
+        :root {
+            --primary-color: #1e3a5f;
+            --primary-dark: #0f172a;
+            --primary-light: #3b82f6;
+            --secondary-color: #c0c0c0;
+            --secondary-light: #e2e8f0;
+            --accent-color: #60a5fa;
+            --bg-dark: #0a0f1a;
+            --bg-card: rgba(30, 58, 95, 0.25);
+            --bg-elevated: rgba(15, 23, 42, 0.6);
+            --text-light: #f1f5f9;
+            --text-muted: #94a3b8;
+            --text-dim: #64748b;
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+            --shadow-glow: 0 0 30px rgba(59, 130, 246, 0.3);
+            --radius-md: 1rem;
+            --radius-lg: 1.5rem;
+            --radius-xl: 2rem;
+        }
+
+        /* ==================== Force Remove Nav Borders ==================== */
+        .navbar, .nav-container, .logo, .nav-menu, .nav-menu li, .nav-link {
+            border: none !important;
+            border-left: none !important;
+            border-right: none !important;
+            border-top: none !important;
+            border-bottom: none !important;
+            outline: none !important;
+        }
+
+        /* ==================== Reset ==================== */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            padding-top: 80px;
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: Georgia, 'Times New Roman', serif;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+        button { font-family: inherit; cursor: pointer; border: none; background: none; }
+        img { max-width: 100%; height: auto; }
+
+        /* ==================== Navbar ==================== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+            z-index: 100;
+            padding: 0 20px;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 70px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .logo-icon {
+            color: var(--primary-light);
+            font-size: 1.5rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-link {
+            color: var(--text-muted);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--text-light);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+        }
+
+        /* ==================== Hero Section ==================== */
+        .page-hero {
+            text-align: center;
+            padding: 60px 20px 40px;
+            background: linear-gradient(180deg, rgba(30, 58, 95, 0.2) 0%, transparent 100%);
+        }
+
+        .page-hero h1 {
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 2.2rem;
+            margin: 0 0 10px 0;
+            background: linear-gradient(135deg, var(--text-light), var(--accent-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .page-hero p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            margin: 0;
+        }
+
+        /* ==================== Main Container ==================== */
+        .quest-main {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* ==================== Action Buttons ==================== */
+        .quest-actions {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-quest {
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: none;
+        }
+
+        .btn-draw {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.9), rgba(30, 58, 95, 0.95));
+            color: var(--text-light);
+            border-radius: 9999px;
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-draw:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-shuffle {
+            background: rgba(30, 58, 95, 0.4);
+            color: var(--text-light);
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            border-radius: 9999px;
+        }
+
+        .btn-shuffle:hover {
+            background: rgba(59, 130, 246, 0.3);
+            border-color: rgba(96, 165, 250, 0.5);
+        }
+
+        /* ==================== Cards Display ==================== */
+        .cards-section {
+            background: rgba(30, 58, 95, 0.2);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(148, 163, 184, 0.15);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 25px;
+            min-height: 300px;
+        }
+
+        .cards-section h2 {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            margin: 0 0 20px 0;
+            text-align: center;
+        }
+
+        .drawn-cards {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .card-slot {
+            width: 120px;
+            height: 220px;
+            background: rgba(30, 58, 95, 0.2);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 10px;
+            border: 2px dashed rgba(59, 130, 246, 0.3);
+        }
+
+        .card-slot .placeholder {
+            color: var(--text-dim);
+            font-size: 0.85rem;
+            margin-top: 100px;
+        }
+
+        .card-slot.filled {
+            border: none;
+            background: rgba(59, 130, 246, 0.15);
+        }
+
+        .card-slot .card-name {
+            color: var(--text-light);
+            font-weight: 600;
+            margin-top: 8px;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+
+        .card-slot .card-meaning {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            text-align: center;
+        }
+
+        .card-slot .card-img {
+            width: 100px;
+            height: auto;
+            max-height: 140px;
+            object-fit: contain;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        /* ==================== Info Grid ==================== */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .info-grid { grid-template-columns: 1fr; }
+            .nav-menu { display: none; }
+            .mobile-menu-btn { display: block; }
+        }
+
+        .info-card {
+            background: rgba(30, 58, 95, 0.2);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(148, 163, 184, 0.15);
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .info-card h3 {
+            color: var(--text-light);
+            font-size: 1rem;
+            margin: 0 0 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .info-card p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* ==================== Crystal Display ==================== */
+        .crystal-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-bottom: 12px;
+        }
+
+        /* ==================== Settings ==================== */
+        .setting-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .setting-item select,
+        .setting-item input {
+            padding: 6px 10px;
+            border-radius: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+            border: 1px solid rgba(124, 58, 237, 0.3);
+            font-size: 0.9rem;
+        }
+
+        /* ==================== Buttons ==================== */
+        .btn-small {
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-top: 12px;
+        }
+
+        .btn-unlock {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.8), rgba(30, 58, 95, 0.9));
+            color: var(--text-light);
+            border-radius: 9999px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-unlock:hover {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.9), rgba(30, 58, 95, 1));
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+        }
+
+        /* ==================== Share Buttons ==================== */
+        .share-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .share-btn {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.8rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--text-light);
+        }
+
+        .share-btn.fb { background: #1877f2; }
+        .share-btn.twitter { background: #1da1f2; }
+        .share-btn.whatsapp { background: #25d366; }
+        .share-btn.copy { background: rgba(255,255,255,0.2); }
+
+        /* ==================== Buy Button ==================== */
+        .btn-buy {
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.9), rgba(59, 130, 246, 0.95));
+            color: var(--text-light);
+            width: 100%;
+            padding: 12px;
+            border-radius: 9999px;
+            border: 1px solid rgba(148, 163, 184, 0.2);
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-buy:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+        }
+
+        /* ==================== Adventure Cards ==================== */
+        .adventure-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        @media (max-width: 500px) {
+            .adventure-grid { grid-template-columns: 1fr; }
+        }
+
+        .adventure-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .adventure-item .icon {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+        }
+
+        .adventure-item .name {
+            color: var(--text-light);
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+
+        .adventure-item .status {
+            color: var(--text-dim);
+            font-size: 0.75rem;
+            margin-bottom: 8px;
+        }
+
+        .adventure-item .btn-unlock-small {
+            background: rgba(124, 58, 237, 0.3);
+            color: var(--text-light);
+            padding: 6px 12px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.75rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">✦</span>
+                <span class="logo-text">Tarot Healing</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="tarot-quest.html" class="nav-link active">Tarot Quest</a></li>
+                <li><a href="deep-reading.html" class="nav-link">Deep Reading</a></li>
+                <li><a href="card-library.html" class="nav-link">Card Library</a></li>
+                <li><a href="lucky-draw.html" class="nav-link">Lucky Draw</a></li>
+                <li><a href="daily-inspiration.html" class="nav-link">Daily Inspiration</a></li>
+                <li><a href="crystal-shop.html" class="nav-link">💎 <span id="crystalCount">0</span></a></li>
+            </ul>
+            <!-- Language Switcher -->
+            <div class="lang-switcher">
+                <button class="lang-btn active" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="zu">ZU</button>
+            </div>
+            <button class="mobile-menu-btn"><span></span><span></span><span></span></button>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="page-hero">
+        <h1 id="heroTitle">✨ Tarot Quest</h1>
+        <p id="heroSubtitle">Start Your Tarot Adventure</p>
+    </section>
+
+    <!-- Main Content -->
+    <div class="quest-main">
+        <!-- Action Buttons -->
+        <div class="quest-actions">
+            <button class="btn-quest btn-draw" id="drawBtn">
+                <span>🎴</span> <span id="drawBtnText">Draw Today's 3 Cards</span>
+            </button>
+            <button class="btn-quest btn-shuffle" id="shuffleBtn">
+                <span>🔀</span> <span id="shuffleBtnText">Shuffle</span>
+            </button>
+        </div>
+
+        <!-- Cards Display -->
+        <div class="cards-section">
+            <h2 id="cardTitle">🔮 Card Results</h2>
+            <div class="drawn-cards" id="cardDisplay">
+                <div class="card-slot">
+                    <span class="placeholder">Click to draw</span>
+                </div>
+                <div class="card-slot">
+                    <span class="placeholder">Click to draw</span>
+                </div>
+                <div class="card-slot">
+                    <span class="placeholder">Click to draw</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Info Grid -->
+        <div class="info-grid">
+            <!-- Adventure Map -->
+            <div class="info-card">
+                <h3>🗺️ <span id="adventureTitle">Adventure Map</span></h3>
+                <div class="adventure-grid">
+                    <div class="adventure-item" data-adventure-id="lover-garden">
+                        <div class="icon">🌹</div>
+                        <div class="name">Garden of Lovers</div>
+                        <div class="status">Locked</div>
+                        <button class="btn-unlock-small">Unlock (3💎)</button>
+                    </div>
+                    <div class="adventure-item" data-adventure-id="wealth-tower">
+                        <div class="icon">🏢</div>
+                        <div class="name">Tower of Wealth</div>
+                        <div class="status">Locked</div>
+                        <button class="btn-unlock-small">Unlock (3💎)</button>
+                    </div>
+                    <div class="adventure-item" data-adventure-id="soul-forest">
+                        <div class="icon">🌲</div>
+                        <div class="name">Forest of Souls</div>
+                        <div class="status">Locked</div>
+                        <button class="btn-unlock-small">Unlock (3💎)</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Settings -->
+            <div class="info-card">
+                <h3>⚙️ <span id="settingsTitle">Settings</span></h3>
+                <div class="setting-item">
+                    <span><span id="languageLabel">Language:</span></span>
+                    <select id="languageSelect">
+                        <option value="en">English</option>
+                        <option value="zu">isiZulu</option>
+                    </select>
+                </div>
+                <div class="setting-item">
+                    <span><span id="reverseLabel">Reverse Probability:</span></span>
+                    <input type="range" id="reverseProb" min="0" max="100" value="40">
+                    <span id="reverseValue">40%</span>
+                </div>
+            </div>
+
+            <!-- Short Reading -->
+            <div class="info-card">
+                <h3>🔮 <span id="shortTitle">Short Reading</span></h3>
+                <p id="shortText">Free reading tips will appear here after drawing 3 cards.</p>
+            </div>
+
+            <!-- Deep Story -->
+            <div class="info-card">
+                <h3>📜 <span id="deepTitle">Deep Story</span></h3>
+                <p>Spend 3 crystals to unlock the full story (500-800 words)</p>
+                <button class="btn-small btn-unlock" id="unlockStoryBtn">
+                    <i class="fas fa-gem"></i> <span id="unlockBtnText">Unlock Deep Story</span>
+                </button>
+            </div>
+
+            <!-- Share -->
+            <div class="info-card">
+                <h3>📱 <span id="shareTitle">Share</span></h3>
+                <div class="share-row">
+                    <button class="share-btn fb"><i class="fab fa-facebook"></i> Facebook</button>
+                    <button class="share-btn twitter"><i class="fab fa-twitter"></i> Twitter</button>
+                    <button class="share-btn whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+                    <button class="share-btn copy"><i class="fas fa-link"></i> Copy</button>
+                </div>
+            </div>
+
+            <!-- Buy Crystals -->
+            <div class="info-card">
+                <h3>💎 <span id="crystalsTitle">Crystals</span></h3>
+                <div class="crystal-row">
+                    <span><span id="currentCrystals">Crystals:</span></span>
+                    <span id="crystalCount">0</span>
+                </div>
+                <button class="btn-buy" id="buyCrystalBtn">
+                    <i class="fas fa-shopping-cart"></i> <span id="buyBtnText">Buy Crystals</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="tarot-data-multilang.js"></script>
+    <script src="data-manager.js"></script>
+    <script src="i18n.js"></script>
+    <script>
+    // ==================== Use Multi-Language Card Data ====================
+    // Get cards from tarot-data-multilang.js or initialize empty
+    let allCards = [];
+    
+    function initializeCards() {
+        if (typeof getLocalizedAllCards === 'function') {
+            const lang = localStorage.getItem('tarot-lang') || 'en';
+            allCards = getLocalizedAllCards(lang);
+        } else {
+            console.error('getLocalizedAllCards is not defined');
+        }
+    }
+    
+    // Initialize on load - wait for DOM content
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('Page loaded, initializing...');
+        initializeCards();
+    
+    // Listen for language changes
+    window.addEventListener('languageChanged', function(e) {
+        if (typeof getLocalizedAllCards === 'function') {
+            const newCards = getLocalizedAllCards(e.detail.lang);
+            allCards.length = 0;
+            allCards.push(...newCards);
+        }
+    });
+
+    // ==================== Adventure Map Data ====================
+    const adventureData = {
+        'lover-garden': {
+            id: 'lover-garden', name: 'Garden of Lovers', icon: '🌹', cost: 3,
+            description: 'Explore the mysteries of love and relationships',
+            stories: [
+                "In the rose bushes of the Garden of Lovers, you discover the true meaning of love. The Lovers card upright, hand in hand, symbolizes harmony and choice. This journey teaches you that true love requires courage and commitment.",
+                "Under the moonlight of the Garden of Lovers, you see the desires deep within your heart. The reversed shadows remind you that relationships need more communication and understanding.",
+                "Through the maze of the Garden of Lovers, you find balance between self and others. Each rose here represents a choice, and every choice shapes your destiny."
+            ]
+        },
+        'wealth-tower': {
+            id: 'wealth-tower', name: 'Tower of Wealth', icon: '🏢', cost: 3,
+            description: 'Discover the path to wealth and career success',
+            stories: [
+                "At the top of the Tower of Wealth shines golden light. You learn how to attract abundance, and the King of Pentacles guides you to success in the material world.",
+                "In the library of the Tower of Wealth, you find the true meaning of value. True wealth is not just money, but the accumulation of knowledge, health, and relationships.",
+                "Climbing the steps of the Tower of Wealth, each step represents your growth. The Three of Wands indicates your efforts will soon be rewarded, with opportunities waiting in the distance."
+            ]
+        },
+        'soul-forest': {
+            id: 'soul-forest', name: 'Forest of Souls', icon: '🌲', cost: 3,
+            description: 'Delve deep within to find spiritual tranquility',
+            stories: [
+                "Deep in the Forest of Souls, the Hermit's lantern illuminates your inner path. Here, solitude is not loneliness, but precious time for dialogue with oneself.",
+                "By the clear stream in the Forest of Souls, you hear your inner voice. The Cups represent the flow of emotions, teaching you how to harmonize with your feelings.",
+                "Through the mists of the Forest of Souls, you find your inner strength. The High Priestess's wisdom tells you that the answer has always been in your heart, just waiting for you to listen quietly."
+            ]
+        }
+    };
+
+    // ==================== Language Data ====================
+    const langData = {
+        en: {
+            title: 'Tarot Quest', subtitle: 'Start Your Tarot Adventure', drawBtn: "Draw Today's 3 Cards", shuffleBtn: 'Shuffle',
+            cardTitle: 'Card Results', placeholder: 'Click to draw', adventure: 'Adventure Map', settings: 'Settings',
+            language: 'Language', reverse: 'Reverse Prob', short: 'Short Reading', shortText: 'Free reading tips will appear here.',
+            deep: 'Deep Story', deepText: 'Spend 3 crystals to unlock full story (500-800 words).', unlock: 'Unlock Deep Story', share: 'Share',
+            crystals: 'Crystals', currentCrystals: 'Crystals: ', buy: 'Buy Crystals', unlocked: 'Unlocked',
+            notEnoughCrystals: 'Not enough crystals, need 3', storyUnlocked: 'Story unlocked!', mapUnlocked: 'Map unlocked!',
+            adventureUnlocked: 'Adventure location unlocked!', unlockMap: 'Unlock'
+        },
+        zu: {
+            title: 'Uhambo Lwe-Tarot', subtitle: 'Qala Uhambo Lwe-Tarot', drawBtn: 'Hudula Amakhadi Ama-3', shuffleBtn: 'Xuba',
+            cardTitle: 'Imiphumela Yemikhadi', placeholder: 'Chofoza ukuhudula', adventure: 'Imephu Yohambo', settings: 'Izinhlelo',
+            language: 'Ulimi', reverse: 'Ithuba Lokuphenduka', short: 'Ukuqondisa Okufushane', shortText: 'Izinhlamvu zamakhadi zizoveza lapha.',
+            deep: 'Indaba Ejulile', deepText: 'Sebenzisa ama-crystals angama-3 avule indaba ephelele.', unlock: 'Vula Indaba Ejulile', share: 'Yabelana',
+            crystals: 'Ama-Crystals', currentCrystals: 'Ama-Crystals: ', buy: 'Thenga Ama-Crystals', unlocked: 'Kuvuliwe',
+            notEnoughCrystals: 'Ama-crystals awanele, adingeka angama-3', storyUnlocked: 'Indaba ivuliwe!', mapUnlocked: 'Imephu ivuliwe!',
+            adventureUnlocked: 'Indawo yohambo ivuliwe!', unlockMap: 'Vula'
+        }
+    };
+
+    // ==================== State Management ====================
+    let currentLang = LanguageManager.get();
+    let crystals = CrystalManager.get();
+    let unlockedMaps = MapUnlockManager.getUnlocked();
+    let currentDrawnCards = [];
+    let isStoryUnlocked = StoryUnlockManager.isUnlocked('default');
+
+    // Update crystal display
+    CrystalManager.updateDisplay('crystalCount');
+
+    // ==================== Language Switch ====================
+    document.getElementById('languageSelect').value = currentLang;
+
+    function applyLang(lang) {
+        const t = langData[lang];
+        document.getElementById('heroTitle').textContent = '✨ ' + t.title;
+        document.getElementById('heroSubtitle').textContent = t.subtitle;
+        document.getElementById('drawBtnText').textContent = t.drawBtn;
+        document.getElementById('shuffleBtnText').textContent = t.shuffleBtn;
+        document.getElementById('cardTitle').textContent = '🔮 ' + t.cardTitle;
+        document.getElementById('adventureTitle').textContent = t.adventure;
+        document.getElementById('settingsTitle').textContent = t.settings;
+        document.getElementById('languageLabel').textContent = t.language + '：';
+        document.getElementById('reverseLabel').textContent = t.reverse + '：';
+        document.getElementById('shortTitle').textContent = t.short;
+        if (!currentDrawnCards.length) document.getElementById('shortText').textContent = t.shortText;
+        document.getElementById('deepTitle').textContent = t.deep;
+        document.getElementById('unlockBtnText').textContent = t.unlock;
+        document.getElementById('shareTitle').textContent = t.share;
+        document.getElementById('crystalsTitle').textContent = t.crystals;
+        document.getElementById('currentCrystals').textContent = t.currentCrystals;
+        document.getElementById('buyBtnText').textContent = t.buy;
+        
+        // Update unlock buttons
+        document.querySelectorAll('.adventure-item').forEach(item => {
+            const adventureId = item.dataset.adventureId;
+            const btn = item.querySelector('.btn-unlock-small');
+            const statusDiv = item.querySelector('.status');
+            if (MapUnlockManager.isUnlocked(adventureId)) {
+                btn.textContent = t.unlocked;
+                btn.disabled = true;
+                statusDiv.textContent = t.unlocked;
+            } else {
+                btn.textContent = t.unlockMap + ' (3' + t.crystals + ')';
+            }
+        });
+    }
+
+    applyLang(currentLang);
+
+    document.getElementById('languageSelect').addEventListener('change', function() {
+        currentLang = this.value;
+        LanguageManager.set(currentLang);
+        applyLang(currentLang);
+    });
+
+    // ==================== Reverse Probability Settings ====================
+    const reverseInput = document.getElementById('reverseProb');
+    const reverseValue = document.getElementById('reverseValue');
+    reverseInput.value = SettingsManager.getReverseProb();
+    reverseValue.textContent = reverseInput.value + '%';
+
+    reverseInput.addEventListener('input', function() {
+        reverseValue.textContent = this.value + '%';
+        SettingsManager.setReverseProb(this.value);
+    });
+
+    // ==================== Fisher-Yates Shuffle ====================
+    function shuffleArray(array) {
+        const arr = [...array];
+        for (let i = arr.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+    }
+
+    // ==================== Get Card Image Filename ====================
+    function getCardImageFilename(card) {
+        return card.name.replace(/ /g, '_') + '.jpg';
+    }
+
+    // ==================== Generate Short Reading ====================
+    function generateShortReading() {
+        if (currentDrawnCards.length !== 3) return;
+        const positions = ['Past', 'Present', 'Future'];
+        let reading = '';
+        currentDrawnCards.forEach((card, index) => {
+            const meaning = card.isReversed ? (card.reversed || 'Reversed Meaning') : (card.upright || 'Upright Meaning');
+            reading += `【${positions[index]}】${card.name}（${card.position}）：${meaning.split('、')[0]}。\n`;
+        });
+        const advices = [
+            "These cards suggest you are at a turning point. Stay open to change.",
+            "The cards show you need more patience. Good things are brewing.",
+            "This is a good time for reflection. Listen to your inner voice."
+        ];
+        reading += `\n💡 ${advices[Math.floor(Math.random() * advices.length)]}`;
+        document.getElementById('shortText').textContent = reading;
+        document.getElementById('shortText').style.whiteSpace = 'pre-line';
+    }
+
+    // ==================== Generate Deep Story Content (500-800 words) ====================
+    function generateDeepStoryContent(cards) {
+        const [pastCard, presentCard, futureCard] = cards;
+        const pn = currentLang === 'zu' ? ['Endule', 'Manje', 'Kusasa'] : ['Past', 'Present', 'Future'];
+        
+        // Generate deep story content (500-800 words) - English only for paid content
+        const storyTemplate = `🌟 Deep Tarot Reading: Your Journey of Destiny 🌟
+
+The three cards you have drawn reveal a profound journey of life. Let the starlight guide you to explore the depths of your inner self.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📜 【The ${pn[0]}】${pastCard.name} (${pastCard.position})
+
+${generateCardDeepDescription(pastCard, 0)}
+
+This past has shaped the foundation of who you are today. The energy of ${pastCard.name} ripples outward, influencing how you face the world. When you look back at this time, you will realize that everything happened for a reason, and every fall was preparation for a higher flight.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔮 【The ${pn[1]}】${presentCard.name} (${presentCard.position})
+
+${generateCardDeepDescription(presentCard, 1)}
+
+At this moment, you stand at the center of this energy. The light of ${presentCard.name} illuminates your current path, reminding you to be fully present. This is no accident, but a precise moment chosen by your soul. Take a deep breath and feel this energy flowing through your being, awakening the dormant power within you.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✨ 【The ${pn[2]}】${futureCard.name} (${futureCard.position})
+
+${generateCardDeepDescription(futureCard, 2)}
+
+The seeds of the future have been planted today. ${futureCard.name} foretells the transformation to come—not as a fixed destiny, but as a manifestation of the subconscious. Every choice you make weaves the tapestry of your future, and this card reminds you: the future is created through present awareness.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🎴 Integrated Card Reading
+
+When ${pastCard.name}, ${presentCard.name}, and ${futureCard.name} converge, they weave a story of growth and awakening.
+
+The resonance of these three cards reveals: you are at an important cycle in your life. Past experiences have given you wisdom, present challenges are tempering your will, and future possibilities await your creation.
+
+${generateThreeCardSynergy(pastCard, presentCard, futureCard)}
+
+💫 Soul Guidance & Action Steps
+
+1. Every morning, spend five minutes in meditation, visualizing the energy of these three cards surrounding you
+2. Record any dreams or synchronicities related to these cards in your journal
+3. When facing decisions, ask yourself: which path aligns more with the qualities represented by ${presentCard.name}?
+4. Release the past, engage with the present, and remain open to the future
+
+Remember, Tarot does not predict a fixed destiny, but illuminates the possibilities within your subconscious. You have the power to create the reality you desire. May the wisdom of these three cards become a guiding light on your path forward.
+
+🌙 May the stars guide your way.`;
+
+        return storyTemplate;
+    }
+
+    // ==================== Generate Single Card Deep Description ====================
+    function generateCardDeepDescription(card, position) {
+        const meanings = card.isReversed ? (card.reversed || 'Reversed Energy') : (card.upright || 'Upright Energy');
+        const positionThemes = [
+            'This past is like an ancient book, each page filled with the wisdom of life',
+            'The present energy flows like a tide, bringing opportunities for transformation and awakening',
+            'The path ahead emerges through the mist, waiting for you to take the next brave step'
+        ];
+        
+        const introspections = [
+            'Looking back, you may find that events that seemed random at the time now form the trajectory of destiny',
+            'In this moment, every breath resonates with universal energy, every thought shapes your reality',
+            'Look to the future, imagine your ideal vision already manifested, let this feeling guide you through present challenges'
+        ];
+        
+        const cardStories = {
+            'The Fool': {
+                en: 'The Fool stands at the cliff\'s edge, carrying a light pack, eyes sparkling with curiosity and trust in the world. This symbolizes new beginnings, representing uncarved innocence and fearless courage.'
+            },
+            'The Magician': {
+                en: 'The Magician stands between heaven and earth, one hand reaching to the sky for inspiration, the other pointing to the ground to manifest vision.'
+            },
+            'The High Priestess': {
+                en: 'The High Priestess sits beneath the laurel tree, holding scrolls of sacred knowledge. She represents the power of intuition, reminding us to listen to our inner voice.'
+            },
+            'The Empress': {
+                en: 'The Empress reclines in the abundant wheat fields, surrounded by nature\'s bounty. She symbolizes creative fertility, maternal nurturing, and sensory pleasure.'
+            },
+            'The Emperor': {
+                en: 'The Emperor sits upon his stone throne, clad in armor, holding scepter and orb. He represents order, authority, and stable structure.'
+            },
+            'The Hierophant': {
+                en: 'The Hierophant sits between two pillars, imparting traditional wisdom to kneeling followers. He represents belief systems, moral codes, and spiritual guidance.'
+            },
+            'The Lovers': {
+                en: 'The Lovers unite under the angel\'s blessing, symbolizing love, harmony, and significant choices. This concerns not just romance, but soul union.'
+            },
+            'The Chariot': {
+                en: 'The Chariot is drawn by two sphinxes, black and white, symbolizing the union of opposing forces. The warrior advances firmly, undeterred by obstacles.'
+            },
+            'Strength': {
+                en: 'A woman gently closes the lion\'s mouth, not through force but through compassion. True strength is not violent display, but inner patience and courage.'
+            },
+            'The Hermit': {
+                en: 'The Hermit climbs the peak alone with his lantern, seeking wisdom in solitude. This is not escape, but necessary introspection.'
+            },
+            'Wheel of Fortune': {
+                en: 'The Wheel of Fortune turns endlessly, rising and falling in nature\'s rhythm. Change is the only constant truth.'
+            },
+            'Justice': {
+                en: 'Lady Justice holds scales and sword, blindfolded for impartial fairness. Every action has its consequence, every choice weaves the web of karma.'
+            },
+            'The Hanged Man': {
+                en: 'The Hanged Man suspends from the World Tree, viewing life from a new angle. This is willing surrender for higher insight.'
+            },
+            'Death': {
+                en: 'The skeleton knight rides a white horse, bringing messages of ending and rebirth. Do not fear this card; it symbolizes necessary transformation.'
+            },
+            'Temperance': {
+                en: 'An angel mixes waters between cups, the art of balance and moderation. Find the middle way between extremes.'
+            },
+            'The Devil': {
+                en: 'The Devil looks down upon chained figures, but the chains are loose. Bondage is illusion; seeing the chains begins liberation.'
+            },
+            'The Tower': {
+                en: 'Lightning strikes the Tower, flames consuming false structures. What seems disaster is actually liberation.'
+            },
+            'The Star': {
+                en: 'A naked woman kneels by water, pouring hope upon earth and spirit. After the darkest night, dawn always comes.'
+            },
+            'The Moon': {
+                en: 'Wolf and dog howl under the moon, the crayfish emerges. This is the realm of subconscious and dreams.'
+            },
+            'The Sun': {
+                en: 'The Sun shines high, illuminating the naked child on a white horse. This is pure joy, success, and vitality\'s peak.'
+            },
+            'Judgement': {
+                en: 'Archangel Gabriel\'s trumpet sounds, people awaken from coffins. This is the moment of reckoning and rebirth.'
+            },
+            'The World': {
+                en: 'The dancer floats in the laurel wreath, completion of a cycle. You have reached a new level of integration.'
+            }
+        };
+        
+        // Minor Arcana Descriptions
+        const minorArcanaStories = {
+            wands: {
+                en: (num) => `The ${num} of Wands carries fire\'s passion and creativity. Wands represent action, will, and spiritual desire.`
+            },
+            cups: {
+                en: (num) => `The ${num} of Cups flows with water\'s emotion and intuition. Cups govern love, relationships, and the heart\'s depths.`
+            },
+            swords: {
+                en: (num) => `The ${num} of Swords flashes with air\'s wisdom and truth. Swords represent mind, communication, and challenges.`
+            },
+            pentacles: {
+                en: (num) => `The ${num} of Pentacles roots in earth\'s abundance and stability. Pentacles govern material matters and practical achievements.`
+            }
+        };
+        
+        let cardDesc = '';
+        if (cardStories[card.name]) {
+            cardDesc = cardStories[card.name].en;
+        } else if (card.suit && card.suit !== 'major') {
+            const suitName = card.suit;
+            const numMatch = card.name.match(/(Ace|[0-9]+|Page|Knight|Queen|King)/);
+            let num = numMatch ? numMatch[1] : '';
+            cardDesc = minorArcanaStories[suitName].en(num);
+        }
+        
+        return `${positionThemes[position] || positionThemes[1]}.
+
+${cardDesc}
+
+This card appears in ${card.position} position, ${card.isReversed ? 'suggesting this energy may be blocked, suppressed, or needs re-examination. Reversed is not a negative judgment, but an invitation to understand this gift from another angle. Perhaps you need to release control and allow life to unfold in its own way.' : 'with energy flowing smoothly, showing its purest expression. This is a positive sign indicating you are on the right path, and the universe supports your growth.'}
+
+${introspections[position] || introspections[1]}.`;
+    }
+
+    // ==================== Generate Three Card Synergy ====================
+    function generateThreeCardSynergy(past, present, future) {
+        return `The journey from ${past.name} to ${present.name} to ${future.name} is a path of awakening, practice, and harvest. Past experiences provide necessary wisdom, present challenges are the stage to apply this wisdom, and the future awaits your creation. Trust this process—every step is necessary.`;
+    }
+
+    // ==================== Show Deep Story ====================
+    function showDeepStory() {
+        // Check if there's a saved story
+        const savedStory = ProgressManager.getValue('deep_story_content');
+        const savedCards = ProgressManager.getValue('deep_story_cards');
+        
+        let story;
+        
+        // If there are current drawn cards, generate new story or update saved
+        if (currentDrawnCards.length === 3) {
+            if (savedStory && savedCards) {
+                // Check if it's the same set of cards
+                const sameCards = currentDrawnCards.every((card, i) => 
+                    card.name === savedCards[i].name && card.position === savedCards[i].position
+                );
+                if (sameCards) {
+                    story = savedStory;
+                } else {
+                    story = generateDeepStoryContent(currentDrawnCards);
+                    ProgressManager.update('deep_story_content', story);
+                    ProgressManager.update('deep_story_cards', currentDrawnCards);
+                }
+            } else {
+                story = generateDeepStoryContent(currentDrawnCards);
+                ProgressManager.update('deep_story_content', story);
+                ProgressManager.update('deep_story_cards', currentDrawnCards);
+            }
+        } else if (savedStory) {
+            // After refresh, no draw data but has saved story, show saved story
+            story = savedStory;
+        } else {
+            // No draw and no saved story
+            const msg = currentLang === 'zu' ? 'Sicela udhule amakhadi ama-3 kuqala' : 'Please draw 3 cards first';
+            document.querySelector('#deepTitle').parentElement.querySelector('p').textContent = msg;
+            return;
+        }
+        
+        document.querySelector('#deepTitle').parentElement.querySelector('p').innerHTML = story.replace(/\n/g, '<br>');
+        document.querySelector('#deepTitle').parentElement.querySelector('p').style.whiteSpace = 'pre-line';
+        document.getElementById('unlockStoryBtn').style.display = 'none';
+    }
+
+    // ==================== Draw Cards ====================
+    function setupDrawButton() {
+        const drawBtn = document.getElementById('drawBtn');
+        if (!drawBtn) return;
+        
+        drawBtn.addEventListener('click', function() {
+        if (!allCards || allCards.length === 0) {
+            alert('Card data loading, please wait...');
+            return;
+        }
+        
+        // Check if already drawn today (quest type)
+        if (!DailyDrawManager.canDrawToday('quest')) {
+            const t = langData[currentLang];
+            const remaining = DailyDrawManager.getRemainingTime('quest');
+            const hours = Math.floor(remaining / (1000 * 60 * 60));
+            const minutes = Math.floor((remaining % (1000 * 60 * 60)) / (1000 * 60));
+            alert((currentLang === 'zu' ? 'Usudlule amakhadi namuhla. Sicela ubuye ngo-' : 'You have already drawn cards today. Please come back in ') + hours + 'h ' + minutes + 'm');
+            return;
+        }
+        
+        const reverseProb = SettingsManager.getReverseProb();
+        const shuffled = shuffleArray(allCards);
+        currentDrawnCards = shuffled.slice(0, 3);
+        let html = '';
+        currentDrawnCards.forEach((card, index) => {
+            const isReversed = Math.random() * 100 < reverseProb;
+            const position = isReversed ? 
+                    (currentLang === 'zu' ? 'Okuphambene' : 'Reversed') : 
+                    (currentLang === 'zu' ? 'Okulungile' : 'Upright');
+            card.isReversed = isReversed;
+            card.position = position;
+            const filename = getCardImageFilename(card);
+            const imgSrc = 'images/tarot/' + filename;
+            const rotationStyle = isReversed ? 'transform: rotate(180deg);' : '';
+            html += '<div class="card-slot filled" style="animation: flipIn 0.6s ease ' + (index * 0.15) + 's both;">' +
+                '<div style="width:100px;height:140px;background:linear-gradient(135deg,#1e3a5f,#0f172a);border-radius:8px;display:flex;align-items:center;justify-content:center;border:2px solid rgba(96,165,250,0.5);overflow:hidden;position:relative;">' +
+                '<img src="' + imgSrc + '" alt="' + card.name + '" style="width:100%;height:100%;object-fit:cover;' + rotationStyle + '" onerror="this.style.display=\'none\';this.parentElement.innerHTML=\'<span style=color:#e2e8f0;font-size:0.7rem;text-align:center;padding:5px;>' + card.name + '</span>\';">' +
+                '</div>' +
+                '<div class="card-name" style="margin-top:8px;font-weight:600;color:#f1f5f9;font-size:0.85rem;text-align:center;">' + card.name + '</div>' +
+                '<div class="card-meaning" style="color:#94a3b8;font-size:0.75rem;text-align:center;margin-top:4px;">' + position + '</div>' +
+            '</div>';
+        });
+        document.getElementById('cardDisplay').innerHTML = html;
+        
+        // Record today's draw (quest type)
+        DailyDrawManager.recordDraw(currentDrawnCards, 'quest');
+        
+        generateShortReading();
+        if (isStoryUnlocked) showDeepStory();
+        console.log('Drew cards:', currentDrawnCards.map(c => c.name));
+    });
+    }
+
+    // ==================== Shuffle Feature ====================
+    function setupShuffleButton() {
+        const shuffleBtn = document.getElementById('shuffleBtn');
+        if (!shuffleBtn) return;
+        
+        shuffleBtn.addEventListener('click', function() {
+        currentDrawnCards = [];
+        const placeholder = currentLang === 'zu' ? 'Chofoza ukuhudula' : 'Click to draw';
+        document.getElementById('cardDisplay').innerHTML = 
+            '<div class="card-slot"><span class="placeholder">' + placeholder + '</span></div>' +
+            '<div class="card-slot"><span class="placeholder">' + placeholder + '</span></div>' +
+            '<div class="card-slot"><span class="placeholder">' + placeholder + '</span></div>';
+        const t = langData[currentLang];
+        document.getElementById('shortText').textContent = t.shortText;
+        if (!isStoryUnlocked) {
+            document.querySelector('#deepTitle').parentElement.querySelector('p').textContent = t.deepText;
+            document.getElementById('unlockStoryBtn').style.display = 'inline-flex';
+        }
+    });
+    }
+
+    // ==================== Buy Crystals ====================
+    function setupBuyCrystalsButton() {
+        const buyCrystalBtn = document.getElementById('buyCrystalBtn');
+        if (!buyCrystalBtn) return;
+        
+        buyCrystalBtn.addEventListener('click', function() {
+        window.location.href = 'crystal-shop.html';
+    });
+    }
+
+    // ==================== Unlock Deep Story ====================
+    function setupUnlockStoryButton() {
+        const unlockStoryBtn = document.getElementById('unlockStoryBtn');
+        if (!unlockStoryBtn) return;
+        
+        unlockStoryBtn.addEventListener('click', function() {
+        if (CrystalManager.canSpend(3)) {
+            CrystalManager.spend(3);
+            CrystalManager.updateDisplay('crystalCount');
+            isStoryUnlocked = true;
+            StoryUnlockManager.unlock('default');
+            showDeepStory();
+            alert(langData[currentLang].storyUnlocked);
+        } else {
+            alert(langData[currentLang].notEnoughCrystals);
+        }
+    });
+
+    // ==================== Show Adventure Story ====================
+    function showAdventureStory(adventure) {
+        const story = adventure.stories[Math.floor(Math.random() * adventure.stories.length)];
+        let storyDiv = document.getElementById('adventure-story-display');
+        if (!storyDiv) {
+            storyDiv = document.createElement('div');
+            storyDiv.id = 'adventure-story-display';
+            storyDiv.className = 'adventure-story-box';
+            storyDiv.style.cssText = 'margin-top:15px;padding:15px;background:linear-gradient(135deg,rgba(124,58,237,0.2),rgba(6,182,212,0.2));border-radius:10px;border:1px solid rgba(167,139,250,0.3);';
+            document.querySelector('.adventure-grid').parentElement.appendChild(storyDiv);
+        }
+        storyDiv.innerHTML = `<h4 style="color:#fbbf24;margin-bottom:10px;">${adventure.icon} ${adventure.name}</h4><p style="color:#e2e8f0;line-height:1.6;white-space:pre-line;">${story}</p>`;
+        storyDiv.style.display = 'block';
+    }
+
+    // ==================== Unlock Adventure Location ====================
+    function unlockAdventure(adventureId, btn) {
+        const adventure = adventureData[adventureId];
+        if (!adventure) return;
+        if (CrystalManager.canSpend(adventure.cost)) {
+            CrystalManager.spend(adventure.cost);
+            CrystalManager.updateDisplay('crystalCount');
+            MapUnlockManager.unlock(adventureId);
+            const adventureItem = btn.closest('.adventure-item');
+            const t = langData[currentLang];
+            adventureItem.querySelector('.status').textContent = t.unlocked;
+            btn.textContent = t.unlocked;
+            btn.disabled = true;
+            btn.classList.add('unlocked');
+            adventureItem.classList.add('unlocked');
+            showAdventureStory(adventure);
+            alert(t.adventureUnlocked);
+        } else {
+            alert(langData[currentLang].notEnoughCrystals);
+        }
+    }
+
+    // ==================== Init Adventure Map ====================
+    function initAdventureMap() {
+        document.querySelectorAll('.adventure-item').forEach(item => {
+            const adventureId = item.dataset.adventureId;
+            const btn = item.querySelector('.btn-unlock-small');
+            if (MapUnlockManager.isUnlocked(adventureId)) {
+                const t = langData[currentLang];
+                item.querySelector('.status').textContent = t.unlocked;
+                btn.textContent = t.unlocked;
+                btn.disabled = true;
+                btn.classList.add('unlocked');
+                item.classList.add('unlocked');
+            }
+            btn.addEventListener('click', function() {
+                unlockAdventure(adventureId, this);
+            });
+        });
+    }
+
+    // ==================== Share Feature ====================
+    document.querySelectorAll('.share-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const text = currentLang === 'zu' ? 'Bheka ukufunda kwami kwe-tarot! ✨🔮' : 'Check out my tarot reading! ✨🔮';
+            const url = window.location.href;
+            if (this.classList.contains('fb')) {
+                window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, '_blank');
+            } else if (this.classList.contains('twitter')) {
+                window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}&url=${encodeURIComponent(url)}`, '_blank');
+            } else if (this.classList.contains('whatsapp')) {
+                window.open(`https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`, '_blank');
+            } else if (this.classList.contains('copy')) {
+                navigator.clipboard.writeText(text + ' ' + url).then(() => {
+                    alert(currentLang === 'zu' ? 'Link iskopishwe!' : 'Link copied!');
+                });
+            }
+        });
+    });
+
+    // ==================== Initialization ====================
+    initAdventureMap();
+    if (isStoryUnlocked) showDeepStory();
+
+    // Listen for crystal update events
+    window.addEventListener('crystalsUpdated', function(e) {
+        document.getElementById('crystalCount').textContent = e.detail.amount;
+    });
+    
+    // Make functions available globally
+    window.getCrystals = function() { return CrystalManager.get(); };
+    window.saveCrystals = function(amount) {
+        CrystalManager.add(amount);
+        CrystalManager.updateDisplay('crystalCount');
+    };
+    </script>
+    <script src="i18n.js"></script>
+    <script src="quest-init.js"></script>
+</body>
+</html>

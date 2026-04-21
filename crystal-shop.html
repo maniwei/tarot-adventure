@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crystal Shop - Tarot Healing</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <!-- Georgia font is available in system, Google font as fallback -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Page specific styles */
+        .crystal-shop-container {
+            min-height: 100vh;
+            padding: 100px 20px 60px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .shop-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .shop-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .shop-header p {
+            color: #4a4a4a;
+            font-size: 1.1rem;
+        }
+
+        /* Crystal balance display */
+        .balance-display {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            background: linear-gradient(135deg, var(--bg-mint), var(--bg-elevated));
+            padding: 20px 40px;
+            border-radius: var(--radius-xl);
+            margin-bottom: 40px;
+            box-shadow: var(--shadow-md);
+            border: 2px solid var(--primary-light);
+        }
+
+        .balance-icon {
+            font-size: 2.5rem;
+        }
+
+        .balance-amount {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        .balance-label {
+            color: #6a6a6a;
+            font-size: 1rem;
+            font-weight: 500;
+        }
+
+        /* Purchase options grid */
+        .purchase-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .purchase-card {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            padding: 32px 24px;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-md);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid var(--bg-elevated);
+        }
+
+        .purchase-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--primary-light);
+        }
+
+        .card-badge {
+            position: absolute;
+            top: 16px;
+            right: -30px;
+            background: var(--accent-gold);
+            color: white;
+            padding: 4px 30px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transform: rotate(45deg);
+        }
+
+        .crystal-amount {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+        }
+
+        .crystal-icon {
+            font-size: 3rem;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .price-info {
+            color: #6a6a6a;
+            font-size: 1rem;
+            font-weight: 500;
+            margin-top: 8px;
+        }
+
+        .price-tag {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 16px 0;
+        }
+
+        .purchase-btn {
+            margin-top: 16px;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+            border-radius: var(--radius-full);
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            width: 100%;
+            border: none;
+            cursor: pointer;
+        }
+
+        .purchase-btn:hover {
+            background: linear-gradient(135deg, var(--primary-dark), var(--primary-color));
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Feature description */
+        .features-section {
+            background: var(--bg-card);
+            border-radius: var(--radius-xl);
+            padding: 32px;
+            margin-top: 40px;
+            border: 2px solid var(--bg-elevated);
+            box-shadow: var(--shadow-md);
+        }
+
+        .features-section h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            text-align: center;
+            color: #1a1a1a;
+        }
+
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: var(--bg-mint);
+            border-radius: var(--radius-lg);
+            color: #1a1a1a;
+        }
+
+        .feature-item i {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        /* PayPal modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(26, 58, 58, 0.6);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-box {
+            background: #1a1f2e;
+            padding: 32px;
+            border-radius: var(--radius-xl);
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            box-shadow: var(--shadow-lg);
+            animation: modalSlideIn 0.3s ease;
+            border: 2px solid var(--primary-light);
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .modal-box h3 {
+            font-size: 1.5rem;
+            margin-bottom: 16px;
+            color: #ffffff;
+        }
+
+        .modal-box p {
+            color: #e0e0e0;
+            margin-bottom: 24px;
+            font-size: 1.1rem;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 16px;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+            padding: 14px 24px;
+            border-radius: var(--radius-lg);
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all var(--transition-normal);
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-confirm {
+            background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+            color: white;
+        }
+
+        .btn-confirm:hover {
+            background: linear-gradient(135deg, var(--primary-light), var(--primary-color));
+        }
+
+        .btn-cancel {
+            background: #3a3f4e;
+            color: #ffffff;
+        }
+
+        .btn-cancel:hover {
+            background: #4a4f5e;
+            color: #ffffff;
+        }
+
+        /* Success toast */
+        .toast {
+            position: fixed;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: linear-gradient(135deg, var(--accent-gold), #c4945a);
+            color: white;
+            padding: 16px 32px;
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 1001;
+            box-shadow: var(--shadow-md);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Responsive */
+        @media (max-width: 640px) {
+            .shop-header h1 {
+                font-size: 1.8rem;
+            }
+
+            .balance-amount {
+                font-size: 1.8rem;
+            }
+
+            .crystal-amount {
+                font-size: 2.8rem;
+            }
+
+            .price-tag {
+                font-size: 1.6rem;
+            }
+
+            .purchase-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .modal *, .popup * {color: #f0f0f0 !important;}
+        .modal button, .popup button {background: #2c3e50 !important;color: white !important;}
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">✦</span>
+                <span class="logo-text">Tarot Healing</span>
+            </a>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="tarot-quest.html" class="nav-link">Tarot Quest</a></li>
+                <li><a href="deep-reading.html" class="nav-link">Deep Reading</a></li>
+                <li><a href="card-library.html" class="nav-link">Card Library</a></li>
+                <li><a href="lucky-draw.html" class="nav-link">Lucky Draw</a></li>
+                <li><a href="daily-inspiration.html" class="nav-link">Daily Inspiration</a></li>
+                <li><a href="crystal-shop.html" class="nav-link active">Crystal Shop</a></li>
+            </ul>
+            <!-- Language Switcher -->
+            <div class="lang-switcher">
+                <button class="lang-btn active" data-lang="en">EN</button>
+                <button class="lang-btn" data-lang="zu">ZU</button>
+            </div>
+            <button class="mobile-menu-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="crystal-shop-container">
+        <div class="shop-header">
+            <h1>💎 Crystal Shop</h1>
+            <p>Purchase crystals to unlock premium content</p>
+        </div>
+
+        <!-- Crystal Balance -->
+        <div class="balance-display">
+            <span class="balance-icon">💎</span>
+            <span class="balance-amount" id="crystalBalance">0</span>
+            <span class="balance-label">Crystals</span>
+        </div>
+
+        <!-- Purchase Options -->
+        <div class="purchase-grid">
+            <!-- 5 Crystals - $0.99 - Starter -->
+            <div class="purchase-card" data-amount="5" data-price="0.99">
+                <span class="crystal-icon">💎</span>
+                <div class="crystal-amount">5</div>
+                <div class="price-info">Crystals</div>
+                <div class="price-tag">$0.99</div>
+                <button class="purchase-btn">Buy Now</button>
+            </div>
+
+            <!-- 12 Crystals - $1.99 - 4 Stories -->
+            <div class="purchase-card" data-amount="12" data-price="1.99">
+                <span class="crystal-icon">💎</span>
+                <div class="crystal-amount">12</div>
+                <div class="price-info">Crystals</div>
+                <div class="price-tag">$1.99</div>
+                <button class="purchase-btn">Buy Now</button>
+            </div>
+
+            <!-- 25 Crystals - $3.99 - Popular -->
+            <div class="purchase-card" data-amount="25" data-price="3.99">
+                <span class="card-badge" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">POPULAR</span>
+                <span class="crystal-icon">💎</span>
+                <div class="crystal-amount">25</div>
+                <div class="price-info">Crystals</div>
+                <div class="price-tag">$3.99</div>
+                <button class="purchase-btn">Buy Now</button>
+            </div>
+
+            <!-- 60 Crystals - $8.99 - Deep User -->
+            <div class="purchase-card" data-amount="60" data-price="8.99">
+                <span class="crystal-icon">💎</span>
+                <div class="crystal-amount">60</div>
+                <div class="price-info">Crystals</div>
+                <div class="price-tag">$8.99</div>
+                <button class="purchase-btn">Buy Now</button>
+            </div>
+
+            <!-- 130 Crystals - $17.99 - VIP -->
+            <div class="purchase-card" data-amount="130" data-price="17.99">
+                <span class="card-badge" style="background: linear-gradient(135deg, #7c3aed, #a78bfa);">VIP</span>
+                <span class="crystal-icon">💎</span>
+                <div class="crystal-amount">130</div>
+                <div class="price-info">Crystals</div>
+                <div class="price-tag">$17.99</div>
+                <button class="purchase-btn">Buy Now</button>
+            </div>
+
+            <!-- 280 Crystals - $34.99 - Ultimate -->
+            <div class="purchase-card" data-amount="280" data-price="34.99">
+                <span class="card-badge" style="background: linear-gradient(135deg, #06b6d4, #22d3ee);">ULTIMATE</span>
+                <span class="crystal-icon">💎</span>
+                <div class="crystal-amount">280</div>
+                <div class="price-info">Crystals</div>
+                <div class="price-tag">$34.99</div>
+                <button class="purchase-btn">Buy Now</button>
+            </div>
+        </div>
+
+        <!-- Features -->
+        <div class="features-section">
+            <h2>💡 What You Can Do With Crystals</h2>
+            <div class="feature-list">
+                <div class="feature-item">
+                    <i class="fas fa-book-open"></i>
+                    <span>Unlock Deep Story Chapters (3 crystals)</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-map"></i>
+                    <span>Open Adventure Map Levels (3 crystals)</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-gem"></i>
+                    <span>Premium Tarot Readings</span>
+                </div>
+                <div class="feature-item">
+                    <i class="fas fa-star"></i>
+                    <span>Exclusive Daily Horoscope</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PayPal Modal -->
+    <div class="modal-overlay" id="paypalModal">
+        <div class="modal-box" style="max-width: 450px;">
+            <h3>Complete Your Purchase</h3>
+            <p id="paypalConfirmText">Buy 5 crystals for $0.99</p>
+            <div id="paypal-button-container" style="margin: 20px 0;"></div>
+            <button class="btn-cancel" id="closePaypalBtn" style="width: 100%;">Cancel</button>
+        </div>
+    </div>
+
+    <!-- Success Toast -->
+    <div class="toast" id="toast">Purchase Successful!</div>
+
+    <!-- PayPal SDK - Replace 'sb' with your actual Client ID for production -->
+    <script src="https://www.paypal.com/sdk/js?client-id=sb&currency=USD&intent=capture&enable-funding=card,paylater"></script>
+    
+    <script src="tarot-data-multilang.js"></script>
+    <script src="data-manager.js"></script>
+    <script>
+        // Crystal Management - using unified CrystalManager
+        
+        // Update balance display
+        function updateBalanceDisplay() {
+            CrystalManager.updateDisplay('crystalBalance');
+        }
+
+        // Show toast notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        // Purchase data
+        let pendingPurchase = { amount: 0, price: 0 };
+        let paypalButtons = null;
+
+        // Initialize PayPal button
+        function initPayPalButton() {
+            const container = document.getElementById('paypal-button-container');
+            container.innerHTML = ''; // Clear previous
+            
+            // Check if PayPal SDK loaded
+            if (typeof paypal === 'undefined') {
+                container.innerHTML = `
+                    <div style="padding: 20px; background: #f8f5f0; border-radius: 12px; margin: 10px 0;">
+                        <p style="color: #e88c6a; margin-bottom: 12px;">
+                            <i class="fas fa-exclamation-circle"></i> PayPal is not available.
+                        </p>
+                        <p style="color: #6c8c8c; font-size: 14px;">
+                            Please check your internet connection or try again later.
+                        </p>
+                    </div>
+                `;
+                return;
+            }
+            
+            paypalButtons = paypal.Buttons({
+                style: {
+                    layout: 'vertical',
+                    color: 'gold',
+                    shape: 'pill',
+                    label: 'pay'
+                },
+                createOrder: function(data, actions) {
+                    return actions.order.create({
+                        purchase_units: [{
+                            amount: {
+                                value: pendingPurchase.price,
+                                currency_code: 'USD'
+                            },
+                            description: `Tarot Healing - ${pendingPurchase.amount} Crystals`
+                        }]
+                    });
+                },
+                onApprove: function(data, actions) {
+                    return actions.order.capture().then(function(details) {
+                        // Payment successful - add crystals
+                        CrystalManager.add(pendingPurchase.amount);
+                        document.getElementById('paypalModal').classList.remove('active');
+                        showToast(`Payment Successful! +${pendingPurchase.amount} crystals added`);
+                        
+                        // Save purchase record
+                        const purchases = JSON.parse(localStorage.getItem('tarot_purchases') || '[]');
+                        purchases.push({
+                            date: new Date().toISOString(),
+                            amount: pendingPurchase.amount,
+                            price: pendingPurchase.price,
+                            orderId: details.id,
+                            payer: details.payer.email_address
+                        });
+                        localStorage.setItem('tarot_purchases', JSON.stringify(purchases));
+                    });
+                },
+                onError: function(err) {
+                    console.error('PayPal Error:', err);
+                    showToast('Payment failed. Please try again.');
+                },
+                onCancel: function() {
+                    showToast('Payment cancelled.');
+                }
+            });
+            
+            paypalButtons.render('#paypal-button-container').catch(function(err) {
+                console.error('PayPal render error:', err);
+                container.innerHTML = `
+                    <div style="padding: 20px; background: #f8f5f0; border-radius: 12px;">
+                        <p style="color: #e88c6a;">Unable to load PayPal. Please refresh and try again.</p>
+                    </div>
+                `;
+            });
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            updateBalanceDisplay();
+            
+            // Listen for crystal update events
+            window.addEventListener('crystalsUpdated', function(e) {
+                document.getElementById('crystalBalance').textContent = e.detail.amount;
+            });
+
+            // Click purchase card
+            document.querySelectorAll('.purchase-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (e.target.classList.contains('purchase-btn')) return;
+                    
+                    const amount = parseInt(this.dataset.amount);
+                    const price = this.dataset.price;
+                    pendingPurchase = { amount, price };
+                    
+                    openPayPalModal();
+                });
+            });
+
+            // Button click also triggers purchase
+            document.querySelectorAll('.purchase-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const card = this.closest('.purchase-card');
+                    const amount = parseInt(card.dataset.amount);
+                    const price = card.dataset.price;
+                    pendingPurchase = { amount, price };
+                    
+                    openPayPalModal();
+                });
+            });
+
+            // Close PayPal modal
+            document.getElementById('closePaypalBtn').addEventListener('click', function() {
+                document.getElementById('paypalModal').classList.remove('active');
+            });
+
+            // Click overlay to close
+            document.getElementById('paypalModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.remove('active');
+                }
+            });
+        });
+
+        function openPayPalModal() {
+            const modal = document.getElementById('paypalModal');
+            document.getElementById('paypalConfirmText').textContent = 
+                `Buy ${pendingPurchase.amount} crystals for $${pendingPurchase.price}`;
+            modal.classList.add('active');
+            
+            // Initialize PayPal button
+            initPayPalButton();
+        }
+
+        // Export for other pages - using CrystalManager
+        window.getCrystals = function() { return CrystalManager.get(); };
+        window.saveCrystals = function(amount) { CrystalManager.add(amount); };
+    </script>
+    <script src="i18n.js"></script>
+</body>
+</html>

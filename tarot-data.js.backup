@@ -1,0 +1,261 @@
+// ==================== Complete Tarot Card Data (78 Cards) with Full Details ====================
+// Format: Each card has name, suit, number, description, uprightMeaning, reversedMeaning, easternWisdom, keywords
+
+const tarotCardData = {
+    // Major Arcana (22 cards)
+    major: [
+        {
+            name: "The Fool",
+            number: 0,
+            description: "《愚者》描绘了一个踏上新旅程的年轻人，背着小包裹，面对未知的未来。他代表着新的开始、冒险精神和对生活的热情。",
+            upright: "新开始、冒险、自由、无限潜力、纯真、自发",
+            reversed: "愚蠢、鲁莽、轻率、危险、冲动、缺乏方向",
+            easternWisdom: "愚者与道家'返璞归真'和佛教'初心'相契合，提醒我们保持对生活的好奇心和开放态度，勇敢踏上精神之旅。"
+        },
+        {
+            name: "The Magician",
+            number: 1,
+            description: "《魔术师》站在祭坛前，手中握着四元素法杖，周围环绕着卢恩符文。他代表着创造力、技能和意志力的运用。",
+            upright: "创造力、技能、意志力、显化、行动、资源",
+            reversed: "欺骗、操纵、才华浪费、缺乏方向、虚伪",
+            easternWisdom: "魔术师与道家'无为而无不为'和'道法自然'相契合，强调内在能量与宇宙力量的和谐运用。"
+        },
+        {
+            name: "The High Priestess",
+            number: 2,
+            description: "《女祭司》坐在两根柱子之间，背后有月亮帷幕。她代表着直觉、潜意识和内在智慧。",
+            upright: "直觉、潜意识、智慧、神秘、内在声音",
+            reversed: "隐藏、压抑、直觉封闭、表面理解、秘密",
+            easternWisdom: "女祭司与佛教'止观双运'和道家'致虚极，守静笃'相契合，提醒我们向内观照，倾听内心深处的智慧。"
+        },
+        {
+            name: "The Empress",
+            number: 3,
+            description: "《皇后》坐着充满生命的场景中，她代表着丰盛、创造力和母性能量。",
+            upright: "丰盛、母性、创造力、自然、富足、感官",
+            reversed: "过度、保护、依赖、空虚、匮乏、浪费",
+            easternWisdom: "皇后与易经'坤'卦和道家'道法自然'相契合，代表大地之母的滋养力量和生命的循环。"
+        },
+        {
+            name: "The Emperor",
+            number: 4,
+            description: "《皇帝》坐在宝座上，代表着权威、结构和父亲般的能量。",
+            upright: "权威、结构、稳定、父亲形象、控制",
+            reversed: "专制、 rigid、缺乏灵活性、压迫、脆弱",
+            easternWisdom: "皇帝与易经'乾'卦相契合，代表天行健，君子以自强不息的进取精神。"
+        },
+        {
+            name: "The Hierophant",
+            number: 5,
+            description: "《教皇》传递传统和精神智慧，代表着信仰、传统和灵性教导。",
+            upright: "传统、信仰、灵性教导、智慧传递",
+            reversed: "反叛、创新缺失、固执、不成熟、误导",
+            easternWisdom: "教皇与儒家'师道'和佛教'法脉传承'相契合，强调精神传统的延续。"
+        },
+        {
+            name: "The Lovers",
+            number: 6,
+            description: "《恋人》描绘了亚当和夏娃在伊甸园的场景，代表着选择、爱情和价值观。",
+            upright: "爱情、和谐、选择、价值观、伙伴关系",
+            reversed: "不和谐、冲突价值观、分离、犹豫、错误选择",
+            easternWisdom: "恋人与阴阳相合相契的概念相契合，代表着对立面的统一与和谐。"
+        },
+        {
+            name: "The Chariot",
+            number: 7,
+            description: "《战车》描绘了胜利的战士，代表着意志力、胜利和决心。",
+            upright: "胜利、意志力、决心、动力、成功",
+            reversed: "侵略、失控、失败、缺乏方向、争论",
+            easternWisdom: "战车与易经'讼'卦相契合，代表着刚健进取和正义的胜利。"
+        },
+        {
+            name: "Strength",
+            number: 8,
+            description: "《力量》描绘了一个温柔地抚摸狮子的女子，代表着勇气、耐心和内在力量。",
+            upright: "勇气、耐心、内在力量、慈悲、温和",
+            reversed: "软弱、焦虑、缺乏耐心、投降、勇气丧失",
+            easternWisdom: "力量与道家'柔弱胜刚强'和佛教'慈悲心'相契合，强调内在精神力量的柔软与坚韧。"
+        },
+        {
+            name: "The Hermit",
+            number: 9,
+            description: "《隐士》举着灯笼寻找内在智慧，代表着内省、智慧和自我探索。",
+            upright: "内省、智慧、独处、自我探索、内在指引",
+            reversed: "孤立、过度内省、孤独、拒绝帮助、离群索居",
+            easternWisdom: "隐士与道家'小国寡民'和佛教'阿兰那'修行相契合，强调独处和内省的重要性。"
+        },
+        {
+            name: "Wheel of Fortune",
+            number: 10,
+            description: "《命运之轮》描绘了一个巨大的轮子，象征生活的起伏和不断变化。",
+            upright: "命运、转折点、机会、变化、循环",
+            reversed: "运气不好、抗拒改变、失去控制、恶性循环",
+            easternWisdom: "命运之轮与易经'变化'和'适应'概念相呼应，提醒我们接受生命的自然循环与变化。"
+        },
+        {
+            name: "Justice",
+            number: 11,
+            description: "《正义》手持剑和天平，代表着平衡、真理和因果。",
+            upright: "平衡、真理、因果、正义、公平",
+            reversed: "不公正、不诚实、内疚、不平衡、逃避责任",
+            easternWisdom: "正义与易经'坤'卦和因果律相契合，强调善恶有报和平衡之道。"
+        },
+        {
+            name: "The Hanged Man",
+            number: 12,
+            description: "《倒吊人》描绘了一个倒挂的人，表面平静，处于自愿牺牲的状态。",
+            upright: "牺牲、暂停、新视角、投降、放手",
+            reversed: "停滞、抵抗、拖延、不作为、无谓牺牲",
+            easternWisdom: "倒吊人与佛教的'放下'和道家的'转变视角'相契合，积极释放执念以获得精神自由。"
+        },
+        {
+            name: "Death",
+            number: 13,
+            description: "《死亡》虽然是结束，但更是转变的开始，代表着蜕变和重生。",
+            upright: "转变、结束、新生、释放、蜕变",
+            reversed: "害怕改变、停滞、绝望、拒绝成长",
+            easternWisdom: "死亡与佛教'无常'和易经'革'卦相契合，提醒我们变化是生命的本质。"
+        },
+        {
+            name: "Temperance",
+            number: 14,
+            description: "《节制》天使正在混合液体，代表着平衡、节制和中庸之道。",
+            upright: "平衡、节制、耐心、调和、中庸",
+            reversed: "过度、失衡、缺乏耐心、极端",
+            easternWisdom: "节制与儒家'中庸之道'相契合，强调适度调和的生活哲学。"
+        },
+        {
+            name: "The Devil",
+            number: 15,
+            description: "《恶魔》代表着阴影自我、物质主义和诱惑。",
+            upright: "阴影、物质主义、诱惑、欲望、束缚",
+            reversed: "释放、打破束缚、觉醒、战胜欲望",
+            easternWisdom: "恶魔与佛教'贪嗔痴'三毒相契合，提醒我们识别和转化内心的黑暗力量。"
+        },
+        {
+            name: "The Tower",
+            number: 16,
+            description: "《塔》被闪电击中，代表着突然的改变和觉醒。",
+            upright: "突然改变、觉醒、毁灭、解放、真相",
+            reversed: "害怕崩溃、拒绝改变、脆弱、过度保护",
+            easternWisdom: "塔与易经'乾'卦的变革相契合，提醒我们有时候破灭是重生的开始。"
+        },
+        {
+            name: "The Star",
+            number: 17,
+            description: "《星星》女人向星星浇水，代表着希望、灵感和宁静。",
+            upright: "希望、灵感、宁静、信心、乐观",
+            reversed: "失望、绝望、失去信心、沮丧、悲观",
+            easternWisdom: "星星与佛教'光明'和道家'上善若水'相契合，带来希望和灵性的指引。"
+        },
+        {
+            name: "The Moon",
+            number: 18,
+            description: "《月亮》代表直觉、梦境和潜意识。",
+            upright: "直觉、梦境、潜意识、幻觉、想象",
+            reversed: "恐惧、错觉、压抑情感、逃避现实",
+            easternWisdom: "月亮与道的'阴'性能量相契合，代表情感和直觉的流动。"
+        },
+        {
+            name: "The Sun",
+            number: 19,
+            description: "《太阳》代表着成功、活力和积极的能量。",
+            upright: "成功、活力、快乐、健康、正能量",
+            reversed: "忧郁、失败、耗尽、缺乏活力",
+            easternWisdom: "太阳与易经'离'卦相契合，代表光明、温暖和生命的活力。"
+        },
+        {
+            name: "Judgement",
+            number: 20,
+            description: "《审判》天使吹响号角，代表着觉醒和重生。",
+            upright: "觉醒、重生、内在呼唤、复兴",
+            reversed: "自我怀疑、拒绝觉醒、没有悔改",
+            easternWisdom: "审判与佛教'发露忏悔'相契合，提醒我们省思和重生的机会。"
+        },
+        {
+            name: "The World",
+            number: 21,
+            description: "《世界》描绘了一个完整的循环，代表着完成和成就。",
+            upright: "完成、成就、满足、完整、圆满",
+            reversed: "不完整、未完成、停滞、缺乏满足",
+            easternWisdom: "世界与易经'乾'卦'元亨利贞'相契合，代表着完美的循环和完成。"
+        }
+    ],
+    
+    // Wands (14 cards)
+    wands: [
+        { name: "Ace of Wands", description: "《权杖Ace》象征着新冒险的火花， 代表创造力的爆发和潜力的觉醒。", upright: "创造力、灵感、潜力、新冒险", reversed: "延迟、缺乏灵感、创造力受阻", easternWisdom: "权杖ACE与道家'元气'和佛教'发心'相契合，代表着初始的创造能量和精神冲动。", keywords: ["creativity", "inspiration", "potential", "new adventure"] },
+        { name: "Two of Wands", description: "《权杖二》描绘了站在城墙上远眺的人，代表着规划和未来的视野。", upright: "规划、决定、未来视野", reversed: "恐惧规划、犹豫不决", easternWisdom: "权杖二与易经'屯'卦相契合，代表着万事开头难的阶段，需要远见和规划。", keywords: ["planning", "decision", "future vision"] },
+        { name: "Three of Wands", description: "《权杖三》描绘了远眺船只的商人，代表着进步、扩展与远见。", upright: "进步、扩展、远见", reversed: "等待、阻碍、挫败", easternWisdom: "权杖三与易经'晋'卦相契合，代表着进升和扩展，需要耐心等待时机。", keywords: ["progress", "expansion", "foresight"] },
+        { name: "Four of Wands", description: "《权杖四》描绘了庆祝和团结的场景，代表着和谐与庆祝。", upright: "庆祝、团结、和谐", reversed: "不稳定、分离、冲突", easternWisdom: "权杖四与儒家'仁'和道家'和'相契合，代表着社群和谐与团结的力量。", keywords: ["celebration", "unity", "harmony"] },
+        { name: "Five of Wands", description: "《权杖五》描绘了五根权杖相互竞争，代表着挑战和竞争。", upright: "竞争、挑战、冲突", reversed: "避免竞争、达成和解", easternWisdom: "权杖五与易经'讼'卦相契合，提醒我们在竞争中保持公正和适度。", keywords: ["competition", "challenge", "conflict"] },
+        { name: "Six of Wands", description: "《权杖六》描绘了胜利的战士，代表着成功和认可。", upright: "胜利、认可、团队精神", reversed: "骄傲、失败、失去认可", easternWisdom: "权杖六与易经'大有'卦相契合，代表着丰收和荣誉，需要谦虚对待。", keywords: ["victory", "recognition", "teamwork"] },
+        { name: "Seven of Wands", description: "《权杖七》描绘了防御的姿态，代表着坚持和防御挑战。", upright: "防御、坚持、挑战", reversed: "疲惫、放弃、过度疲劳", easternWisdom: "权杖七与道家'柔弱胜刚强'相契合，教会我们在防守中保持韧性。", keywords: ["防御", "坚持", "挑战"] },
+        { name: "Eight of Wands", description: "《权杖八》描绘了快速移动的权杖，代表着快速行动和消息。", upright: "快速行动、变化、消息", reversed: "延迟、等待、失落感", easternWisdom: "权杖八与易经'巽'卦相契合，代表着风的流动和信息的传递。", keywords: ["快速", "行动", "消息"] },
+        { name: "Nine of Wands", description: "《权杖九》描绘了战士最后的防御，代表着韧性和坚持。", upright: "韧性、坚持、最后的努力", reversed: "怀疑、疲惫、准备不足", easternWisdom: "权杖九与易经'恒'卦相契合，代表着恒心和坚持到最后的勇气。", keywords: ["韧性", "坚持", "努力"] },
+        { name: "Ten of Wands", description: "《权杖十》描绘了沉重的负担，代表着责任和压力。", upright: "重担、责任、压力", reversed: "无法承担、压力过大、寻求帮助", easternWisdom: "权杖十与佛教'负担'和道家'轻身'相契合，提醒我们学会放下不必要的负担。", keywords: ["重担", "责任", "压力"] },
+        { name: "Page of Wands", description: "《权杖宫廷》描绘了年轻的信使，代表着新机会和热情的探索。", upright: "新机会、热情、探索", reversed: "延迟、兴趣减退", easternWisdom: "权杖侍从与佛教'初发心'相契合，代表着新的开始和探索精神。", keywords: ["新机会", "热情", "探索"] },
+        { name: "Knight of Wands", description: "《骑士》描绘了行动的战士，代表着冲动和热情的行动。", upright: "行动、热情、冲动", reversed: "延迟、缺乏方向", easternWisdom: "权杖骑士与易经'乾'卦相契合，代表着积极进取的阳刚之气。", keywords: ["行动", "热情", "冲动"] },
+        { name: "Queen of Wands", description: "《女王》描绘了自信的女性，代表着魅力和创造力。", upright: "自信、魅力、创造力", reversed: "嫉妒、缺乏自信", easternWisdom: "权杖女王与易经'离'卦相契合，代表着光明的创造力和温暖。", keywords: ["自信", "魅力", "创造力"] },
+        { name: "King of Wands", description: "《国王》描绘了领导者的形象，代表着愿景和创业精神。", upright: "领导力、愿景、创业精神", reversed: "独裁、缺乏愿景", easternWisdom: "权杖国王与道家'无为而治'相契合，代表着有远见的领导者。", keywords: ["领导力", "愿景", "创业"] }
+    ],
+    
+    // Cups (14 cards)
+    cups: [
+        { name: "Ace of Cups", description: "《圣杯ACE》象征着情感的源泉，代表着新的情感开始。", upright: "爱、情感、新的情感开始", reversed: "情感封闭、空虚", easternWisdom: "圣杯ACE与佛教'慈悲心'相契合，代表着爱与同情心的源头。", keywords: ["爱", "情感", "新开始"] },
+        { name: "Two of Cups", description: "《圣杯二》描绘了情侣交换圣杯，代表着伙伴关系。", upright: "伙伴关系、爱、平衡", reversed: "不平衡、分离", easternWisdom: "圣杯二与阴阳相合相契概念相契合，代表着情感的平衡与结合。", keywords: ["伙伴", "爱", "平衡"] },
+        { name: "Three of Cups", description: "《圣杯三》描绘了庆祝的场景，代表着友谊和团体。", upright: "庆祝、友谊、团体", reversed: "过度放纵、孤独", easternWisdom: "圣杯三与儒家'有朋自远方来'相契合，代表着友谊和社群之乐。", keywords: ["庆祝", "友谊", "团体"] },
+        { name: "Four of Cups", description: "《圣杯四》描绘了沉思的人，代表着反省和选择。", upright: "反省、选择、拒绝", reversed: "开放接受新机会", easternWisdom: "圣杯四与道家'内观'相契合，提醒我们要有选择地接受。", keywords: ["反省", "选择", "拒绝"] },
+        { name: "Five of Cups", description: "《圣杯五》描绘了倒落的圣杯，代表着失落和悲伤。", upright: "失落、悲伤、接受", reversed: "接受、继续前进", easternWisdom: "圣杯五与佛教'无常'相契合，接受失去并继续前行。", keywords: ["失落", "悲伤", "接受"] },
+        { name: "Six of Cups", description: "《圣杯六》描绘了回忆的场景，代表着怀旧和纯真。", upright: "怀旧、回忆、纯真", reversed: "活在过去、不切实际", easternWisdom: "圣杯六与道家'復归於婴儿'相契合，代表着回归纯真的状态。", keywords: ["怀旧", "回忆", "纯真"] },
+        { name: "Seven of Cups", description: "《圣杯七》描绘了幻象的场景，代表着幻想和选择。", upright: "幻想、选择、梦想", reversed: "清晰、专注、决策", easternWisdom: "圣杯七与佛教'执着'相契合，提醒我们从幻想中清醒。", keywords: ["幻想", "选择", "梦想"] },
+        { name: "Eight of Cups", description: "《圣杯八》描绘了离开的场景，代表着追求满足。", upright: "追求满足、情感疏离", reversed: "停留、害怕离开", easternWisdom: "圣杯八与易经'旅'卦相契合，提醒我们学会放手离开。", keywords: ["离开", "追求", "疏离"] },
+        { name: "Nine of Cups", description: "《圣杯九》描绘了满足的人，代表着愿望的实现。", upright: "满足、愿望实现", reversed: "不满足、贪婪", easternWisdom: "圣杯九与易经'谦'卦相契合，教会我们知足常乐。", keywords: ["满足", "愿望", "实现"] },
+        { name: "Ten of Cups", description: "《圣杯十》描绘了和谐家庭的场景，代表着家庭幸福。", upright: "和谐、家庭幸福", reversed: "家庭冲突、分离", easternWisdom: "圣杯十与儒家'孝悌'相契合，代表着家庭和谐的理想。", keywords: ["和谐", "家庭", "幸福"] },
+        { name: "Page of Cups", description: "《圣杯宫廷》描绘了年轻的信使，代表着情感信息。", upright: "情感信息、直觉", reversed: "情感压抑", easternWisdom: "圣杯侍从与佛教'心有所感'相契合，代表着情感的启示。", keywords: ["情感", "信息", "直觉"] },
+        { name: "Knight of Cups", description: "《圣杯骑士》描绘了浪漫的骑士，代表着情感的推动。", upright: "浪漫、创意推动", reversed: "幻想、失望", easternWisdom: "圣杯骑士与道家'情动'相契合，代表着浪漫的情感流动。", keywords: ["浪漫", "创意", "推动"] },
+        { name: "Queen of Cups", description: "《圣杯女王》描绘了情感成熟的女性，代表着直觉和包容。", upright: "情感成熟、直觉", reversed: "情感依赖、脆弱", easternWisdom: "圣杯女王与易经'坤'卦相契合，代表着包容和养育的阴性力量。", keywords: ["成熟", "直觉", "包容"] },
+        { name: "King of Cups", description: "《圣杯国王》描绘了情感平衡的领袖，代表着智慧。", upright: "情感平衡、智慧", reversed: "情感操纵、冷漠", easternWisdom: "圣杯国王与儒家'中和'相契合，代表着情感智慧的成熟。", keywords: ["平衡", "智慧", "成熟"] }
+    ],
+    
+    // Swords (14 cards)
+    swords: [
+        { name: "Ace of Swords", description: "《宝剑ACE》象征着真理的刀刃，代表着清晰的思维。", upright: "真理、清新、清晰", reversed: "混乱、误导", easternWisdom: "宝剑ACE与佛教'正念'相契合，代表着智慧之剑斩断迷惑。", keywords: ["真理", "清晰", "思维"] },
+        { name: "Two of Swords", description: "《宝剑二》描绘了困难的选择，代表着推迟决定。", upright: "困难选择、推迟决定", reversed: "无法决定、信息过载", easternWisdom: "宝剑二与易经'屯'卦相契合，提醒我们在困难中做出选择。", keywords: ["选择", "困难", "推迟"] },
+        { name: "Three of Swords", description: "《宝剑三》描绘了心碎的象征，代表着悲伤和释放。", upright: "心碎、悲伤、释放", reversed: "治愈、恢复", easternWisdom: "宝剑三与佛教'无常'相契合，接受悲伤并走向疗愈。", keywords: ["心碎", "悲伤", "释放"] },
+        { name: "Four of Swords", description: "《宝剑四》描绘了休息的场景，代表着恢复和和平。", upright: "休息、恢复、和平", reversed: "焦虑、无法休息", easternWisdom: "宝剑四与道家'静'相契合，代表着休息和恢复的力量。", keywords: ["休息", "恢复", "和平"] },
+        { name: "Five of Swords", description: "《宝剑五》描绘了冲突，代表着胜利和骄傲。", upright: "冲突、胜利、骄傲", reversed: "修复、宽恕", easternWisdom: "宝剑五与易经'讼'卦相契合，提醒我们在冲突中寻求和平。", keywords: ["冲突", "胜利", "骄傲"] },
+        { name: "Six of Swords", description: "《宝剑六》描绘了过渡的场景，代表着改变和疗愈。", upright: "过渡、改变、疗愈", reversed: "停滞、无法前进", easternWisdom: "宝剑六与易经'渐'卦相契合，代表着逐渐过渡的疗愈之路。", keywords: ["过渡", "改变", "疗愈"] },
+        { name: "Seven of Swords", description: "《宝剑七》描绘了隐秘的行动，代表着战略和计划。", upright: "战略、计划、隐秘", reversed: "内疚、承认", easternWisdom: "宝剑七与道家'诡道'相契合，提醒我们在计谋中保持正直。", keywords: ["战略", "计划", "隐秘"] },
+        { name: "Eight of Swords", description: "《宝剑八》描绘了受限的场景，代表着限制和受害者心态。", upright: "限制、困住、受害者心态", reversed: "释放、自由", easternWisdom: "宝剑八与佛教'我执'相契合，提醒我们突破自我设限。", keywords: ["限制", "被困", "受害者"] },
+        { name: "Nine of Swords", description: "《宝剑九》描绘了噩梦的场景，代表着焦虑和恐惧。", upright: "焦虑、恐惧、噩梦", reversed: "面对恐惧", easternWisdom: "宝剑九与道家'心斋'相契合，提醒我们面对内心的恐惧。", keywords: ["焦虑", "恐惧", "噩梦"] },
+        { name: "Ten of Swords", description: "《宝剑十》描绘了痛苦的结束，代表着背叛和终点。", upright: "痛苦结束、背叛", reversed: "治愈、恢复", easternWisdom: "宝剑十与佛教'置之死地而后生'相契合，提醒我们痛极思变。", keywords: ["痛苦", "背叛", "终点"] },
+        { name: "Page of Swords", description: "《宝剑宫廷》描绘了年轻的信使，代表着信息和真理。", upright: "信息、好奇、真理", reversed: "误解、信息不准确", easternWisdom: "宝剑侍从与佛教'闻思修'相契合，代表着追求真理的过程。", keywords: ["信息", "好奇", "真理"] },
+        { name: "Knight of Swords", description: "《宝剑骑士》描绘了激进追求真相的骑士。", upright: "激进、真相追求", reversed: "攻击性、欺骗", easternWisdom: "宝剑骑士与儒家'杀身成仁'相契合，提醒我们在追求真相时保持理性。", keywords: ["激进", "追求", "真相"] },
+        { name: "Queen of Swords", description: "《宝剑女王》描绘了智慧独立的女性，代表着清晰和批判。", upright: "清晰、智慧、独立", reversed: "冷漠、批判", easternWisdom: "宝剑女王与易经'兑'卦相契合，代表着智慧的清晰表达。", keywords: ["清晰", "智慧", "独立"] },
+        { name: "King of Swords", description: "《宝剑国王》描绘了权威的统治者，代表着理性和权威。", upright: "权威、理性、真理", reversed: "暴政、滥用权力", easternWisdom: "宝剑国王与道家'太上'相契合，提醒我们权力需要仁慈驾驭。", keywords: ["权威", "理性", "真理"] }
+    ],
+    
+    // Pentacles (14 cards)
+    pentacles: [
+        { name: "Ace of Pentacles", description: "《金币ACE》象征着物质的源泉，代表着新机会。", upright: "新机会、物质开始、繁荣", reversed: "机会错失", easternWisdom: "金币ACE与易经'乾'卦相契合，代表着物质世界的开启。", keywords: ["新机会", "物质", "繁荣"] },
+        { name: "Two of Pentacles", description: "《金币二》描绘了平衡的资源，代表着管理。", upright: "平衡、资源管理", reversed: "失衡、过载", easternWisdom: "金币二与儒家'中庸'相契合，提醒我们在资源上保持平衡。", keywords: ["平衡", "管理", "资源"] },
+        { name: "Three of Pentacles", description: "《金币三》描绘了工匠的工作，代表着团队合作。", upright: "团队合作、工艺", reversed: "缺乏团队精神", easternWisdom: "金币三与道家'无用'相契合，提醒我们重视团队协作的力量。", keywords: ["团队", "工艺", "合作"] },
+        { name: "Four of Pentacles", description: "《金币四》描绘了保护的姿态，代表着安全和控制。", upright: "安全、控制、占有", reversed: "慷慨、放手", easternWisdom: "金币四与佛教'布施'相契合，教会我们学会分享和放手。", keywords: ["安全", "控制", "占有"] },
+        { name: "Five of Pentacles", description: "《金币五》描绘了困难的时期，代表着孤立和困难。", upright: "困难时期、孤立", reversed: "恢复、希望", easternWisdom: "金币五与易经'蹇'卦相契合，提醒我们在困难中保持希望。", keywords: ["困难", "孤立", "希望"] },
+        { name: "Six of Pentacles", description: "《金币六》描绘了分享的场景，代表着慈善和平衡。", upright: "分享、慈善、平衡", reversed: "自私、债务", easternWisdom: "金币六与儒家'仁者爱人'相契合，代表着分享和慈悲的精神。", keywords: ["分享", "慈善", "平衡"] },
+        { name: "Seven of Pentacles", description: "《金币七》描绘了等待和投资，代表着耐心。", upright: "耐心、等待、长期投资", reversed: "缺乏耐心、提前收获", easternWisdom: "金币七与易经'升'卦相契合，提醒我们要耐心等待收获。", keywords: ["耐心", "等待", "投资"] },
+        { name: "Eight of Pentacles", description: "《金币八》描绘了工艺的学习，代表着技巧。", upright: "工艺、学习、技巧", reversed: "缺乏技能、骄傲", easternWisdom: "金币八与道家'技近乎道'相契合，提醒我们在技艺中精进。", keywords: ["工艺", "学习", "技巧"] },
+        { name: "Nine of Pentacles", description: "《金币九》描绘了独立的女性，代表着物质成功。", upright: "独立、物质成功", reversed: "依赖、财务不稳", easternWisdom: "金币九与易经'大畜'卦相契合，代表着物质积累的成功。", keywords: ["独立", "成功", "物质"] },
+        { name: "Ten of Pentacles", description: "《金币十》描绘了财富的场景，代表着家庭成功。", upright: "财富、继承、家庭成功", reversed: "财务损失、家庭问题", easternWisdom: "金币十与儒家'齐家'相契合，代表着家庭和财富的双重成功。", keywords: ["财富", "继承", "家庭"] },
+        { name: "Page of Pentacles", description: "《金币宫廷》描绘了年轻的学习者，代表着新机会。", upright: "新机会、学习", reversed: "拖延、错误", easternWisdom: "金币侍从与佛教'学而不厌'相契合，代表着学习和成长的开始。", keywords: ["学习", "新机会", "成长"] },
+        { name: "Knight of Pentacles", description: "《金币骑士》描绘了勤奋的工作者，代表着耐心。", upright: "耐心、责任、工作", reversed: "懒惰、迟缓", easternWisdom: "金币骑士与道家'务实'相契合，代表着脚踏实地的努力。", keywords: ["勤奋", "耐心", "工作"] },
+        { name: "Queen of Pentacles", description: "《金币女王》描绘了实际的女性，代表着丰盛。", upright: "实际、稳定、丰盛", reversed: "浪费、依赖", easternWisdom: "金币女王与易经'坤'卦相契合，代表着大地的丰盛。", keywords: ["实际", "稳定", "丰盛"] },
+        { name: "King of Pentacles", description: "《金币国王》描绘了成功的商人，代表着物质主义大师。", upright: "商业成功、物质主义大师", reversed: "物质主义、贪婪", easternWisdom: "金币国王与道家'知足不辱'相契合，提醒我们在成功中保持知足。", keywords: ["成功", "商业", "知足"] }
+    ]
+};
+
+// Export for use
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = tarotCardData;
+}

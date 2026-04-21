@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deep Reading - Tarot Healing</title>
+    <meta name="description" content="Calm your mind, ask your question, and listen to the whispers of the universe">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Deep Reading Specific Styles */
+        .deep-reading-page {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            min-height: 100vh;
+            padding-top: 80px;
+            padding-bottom: 60px;
+        }
+
+        .reading-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        .reading-card {
+            background: rgba(37, 37, 37, 0.9);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            padding: 40px 24px;
+        }
+
+        @media (min-width: 768px) {
+            .reading-card {
+                padding: 60px 48px;
+            }
+        }
+
+        .reading-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .reading-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-family: 'Noto Serif SC', serif;
+        }
+
+        @media (min-width: 768px) {
+            .reading-title {
+                font-size: 2.5rem;
+            }
+        }
+
+        .reading-subtitle {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 32px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 10px;
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(60, 60, 60, 0.5);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 12px;
+            font-size: 1rem;
+            resize: none;
+            min-height: 120px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+            color: var(--text);
+        }
+
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 14px 18px;
+            background: rgba(60, 60, 60, 0.5);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            border-radius: 12px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23d4af37'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 14px center;
+            background-size: 20px;
+            padding-right: 48px;
+            color: var(--text);
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
+        }
+
+        /* Controls Row */
+        .controls-row {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+
+        @media (min-width: 640px) {
+            .controls-row {
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: flex-end;
+            }
+        }
+
+        .spread-selector {
+            flex: 1;
+            max-width: 400px;
+        }
+
+        /* Drawn Cards Display */
+        .cards-section {
+            margin-bottom: 40px;
+        }
+
+        .cards-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 32px;
+            font-family: 'Noto Serif SC', serif;
+        }
+
+        .cards-display {
+            display: flex;
+            justify-content: center;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 24px;
+        }
+
+        @media (min-width: 768px) {
+            .cards-display {
+                gap: 32px;
+            }
+        }
+
+        .card-item {
+            text-align: center;
+        }
+
+        .card-image-wrapper {
+            width: 130px;
+            aspect-ratio: 2/3;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            margin-bottom: 12px;
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .card-image-wrapper {
+                width: 160px;
+            }
+        }
+
+        /* Celtic Cross layout - smaller cards for 10 cards */
+        .cards-display[data-spread="celtic"] .card-image-wrapper {
+            width: 100px;
+        }
+
+        @media (min-width: 768px) {
+            .cards-display[data-spread="celtic"] .card-image-wrapper {
+                width: 120px;
+            }
+        }
+
+        /* Large spread cards display - reduce size for many cards */
+        .cards-display:has(> .card-item:nth-child(7)) .card-image-wrapper {
+            width: 90px;
+        }
+
+        @media (min-width: 768px) {
+            .cards-display:has(> .card-item:nth-child(7)) .card-image-wrapper {
+                width: 110px;
+            }
+        }
+
+        .card-image-wrapper img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .card-position {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .card-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .intuition-hint {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-top: 16px;
+        }
+
+        /* Interpretation Section */
+        .interpretation-section {
+            background: rgba(60, 60, 60, 0.5);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 16px;
+            padding: 32px 24px;
+            margin-bottom: 32px;
+        }
+
+        .interpretation-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 24px;
+            font-family: 'Noto Serif SC', serif;
+        }
+
+        .interpretation-content {
+            color: var(--text);
+            line-height: 1.8;
+            white-space: pre-line;
+        }
+
+        .interpretation-content strong {
+            color: var(--primary);
+        }
+
+        .interpretation-content em {
+            color: var(--text-light);
+            font-style: italic;
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Tip Modal Styles */
+        .tip-modal .modal-content {
+            max-width: 420px;
+        }
+
+        .tip-amounts {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .tip-amount-btn {
+            padding: 14px 8px;
+            border-radius: 10px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: #f2f6f5;
+            color: var(--text);
+        }
+
+        .tip-amount-btn:hover {
+            background: #e8f5f1;
+        }
+
+        .tip-amount-btn.selected {
+            background: var(--primary);
+            color: white;
+        }
+
+        .tip-custom-input {
+            width: 100%;
+            padding: 14px;
+            border: 1px solid #e0e8e6;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1rem;
+            margin-bottom: 20px;
+        }
+
+        .tip-custom-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .paypal-btn {
+            width: 100%;
+            background: #0070ba;
+            color: white;
+            padding: 16px 24px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1rem;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: background 0.3s ease;
+        }
+
+        .paypal-btn:hover {
+            background: #005ea6;
+        }
+
+        .paypal-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .paypal-icon {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        .success-state {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .success-icon {
+            width: 64px;
+            height: 64px;
+            background: #dcfce7;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+        }
+
+        .success-icon svg {
+            width: 32px;
+            height: 32px;
+            color: #22c55e;
+        }
+
+        .secure-note {
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 16px;
+        }
+
+        /* Card Shimmer Loading Effect */
+        .card-shimmer {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <nav class="header-nav">
+                <a href="index.html" class="logo">
+                    <svg class="logo-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93s3.05-7.44 7-7.93v15.86zm2-15.86c1.03.13 2 .45 2.87.93H13v-.93zM13 7h5.24c.25.31.48.65.68 1H13V7zm0 3h6.74c.08.33.15.66.19 1H13v-1zm0 9.93V19h2.87c-.87.48-1.84.8-2.87.93zM18.24 17H13v-1h5.92c-.2.35-.43.69-.68 1zm1.5-3H13v-1h6.93c-.04.34-.11.67-.19 1z"/>
+                    </svg>
+                    <span class="logo-text mystical-text">Tarot Healing</span>
+                </a>
+
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link" data-i18n="home">Home</a></li>
+                    <li><a href="tarot-quest.html" class="nav-link" data-i18n="tarotQuest">Tarot Quest</a></li>
+                    <li><a href="deep-reading.html" class="nav-link active" data-i18n="deepReading">Deep Reading</a></li>
+                    <li><a href="card-library.html" class="nav-link" data-i18n="cardLibrary">Card Library</a></li>
+                    <li><a href="lucky-draw.html" class="nav-link" data-i18n="luckyDraw">Lucky Draw</a></li>
+                </ul>
+
+                <div class="header-actions">
+                    <div class="lang-switcher">
+                        <button class="lang-btn active" data-lang="en">EN</button>
+                        <button class="lang-btn" data-lang="zu">ZU</button>
+                    </div>
+                    <button class="crystal-btn" id="crystalBtn">
+                        <span class="crystal-icon">💎</span>
+                        <span class="crystal-count" id="crystalCount">0</span>
+                        <span class="crystal-plus">+</span>
+                    </button>
+                    <button class="signin-btn" data-i18n="signIn">Sign In</button>
+                    <button class="mobile-menu-btn" id="mobileMenuBtn">
+                        <svg class="menu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
+            </nav>
+
+            <div class="mobile-menu" id="mobileMenu">
+                <div class="mobile-lang-switcher">
+                    <button class="mobile-lang-btn active" data-lang="en">English</button>
+                    <button class="mobile-lang-btn" data-lang="zu">isiZulu</button>
+                </div>
+                <ul class="mobile-nav-list">
+                    <li><a href="index.html" class="mobile-nav-link" data-i18n="home">Home</a></li>
+                    <li><a href="tarot-quest.html" class="mobile-nav-link" data-i18n="tarotQuest">Tarot Quest</a></li>
+                    <li><a href="deep-reading.html" class="mobile-nav-link active" data-i18n="deepReading">Deep Reading</a></li>
+                    <li><a href="card-library.html" class="mobile-nav-link" data-i18n="cardLibrary">Card Library</a></li>
+                    <li><a href="lucky-draw.html" class="mobile-nav-link" data-i18n="luckyDraw">Lucky Draw</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="deep-reading-page">
+        <div class="reading-container">
+            <div class="reading-card">
+                <!-- Header -->
+                <div class="reading-header">
+                    <h1 class="reading-title mystical-text" data-i18n="title">Tarot Deep Reading</h1>
+                    <p class="reading-subtitle" data-i18n="subtitle">Calm your mind, ask your question, and listen to the whispers of the universe.</p>
+                </div>
+
+                <!-- Question Input -->
+                <div class="form-group">
+                    <label class="form-label" data-i18n="questionLabel">Your question, asked from the heart:</label>
+                    <textarea 
+                        class="form-textarea" 
+                        id="questionInput"
+                        data-i18n-attr="placeholder"
+                        data-placeholder-en="e.g., How should I face challenges at work?"
+                        data-placeholder-zu="Isib., Kufanele ngibhekane kanjani nezinselelo emsebenzini?"
+                        placeholder="e.g., How should I face challenges at work?"
+                    ></textarea>
+                </div>
+
+                <!-- Controls -->
+                <div class="controls-row">
+                    <div class="spread-selector">
+                        <label class="form-label" data-i18n="chooseSpread">Choose Spread:</label>
+                        <select class="form-select" id="spreadSelect">
+                            <option value="single" data-i18n="singleCard">Single Card (Daily Guidance)</option>
+                            <option value="three" selected data-i18n="threeCardSpread">Three Card Spread (Past-Present-Future)</option>
+                            <option value="celtic" data-i18n="celticCross">Celtic Cross (10 Cards)</option>
+                            <option value="relationship" data-i18n="relationship">Relationship Spread (2 Cards)</option>
+                        </select>
+                    </div>
+                    <button class="btn-primary" id="drawCardsBtn" data-i18n="drawCards">Draw Tarot Cards</button>
+                </div>
+
+                <!-- Cards Display -->
+                <div class="cards-section" id="cardsSection" style="display: none;">
+                    <h2 class="cards-title mystical-text" data-i18n="yourSpread">Your Tarot Spread</h2>
+                    <div class="cards-display" id="cardsDisplay">
+                        <!-- Cards will be inserted here -->
+                    </div>
+                    <p class="intuition-hint" data-i18n="connectIntuition">Connect your first intuition with each card.</p>
+                    <button class="btn-primary" id="getReadingBtn" style="width: 100%; margin-top: 24px;" data-i18n="getReading">Get a Deep Reading (Free First Time!)</button>
+                </div>
+
+                <!-- Interpretation -->
+                <div class="interpretation-section" id="interpretationSection" style="display: none;">
+                    <h2 class="interpretation-title mystical-text" data-i18n="messages">Messages from the Universe</h2>
+                    <div class="interpretation-content" id="interpretationContent"></div>
+                </div>
+
+                <!-- Tip Button -->
+                <div class="text-center" id="tipButtonContainer" style="display: none;">
+                    <button class="btn-primary" id="tipBtn" data-i18n="tipSupport">Tip to Support Me</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Tip Modal -->
+    <div class="modal tip-modal" id="tipModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="tipModalClose">&times;</button>
+            
+            <div id="tipForm">
+                <h3 class="modal-title mystical-text" data-i18n="tipTitle">Support My Work</h3>
+                <p class="modal-subtitle" data-i18n="tipSubtitle">Your support means the world to me!</p>
+                <p style="text-align: center; color: var(--text-light); font-size: 0.9rem; margin-bottom: 20px;" data-i18n="tipChoose">Choose any amount to show your appreciation</p>
+                
+                <div class="tip-amounts">
+                    <button class="tip-amount-btn" data-amount="3">$3</button>
+                    <button class="tip-amount-btn selected" data-amount="5">$5</button>
+                    <button class="tip-amount-btn" data-amount="10">$10</button>
+                    <button class="tip-amount-btn" data-amount="15">$15</button>
+                    <button class="tip-amount-btn" data-amount="25">$25</button>
+                    <button class="tip-amount-btn" data-amount="50">$50</button>
+                </div>
+                
+                <input 
+                    type="number" 
+                    class="tip-custom-input" 
+                    id="customAmount"
+                    data-i18n-attr="placeholder"
+                    data-placeholder-en="Other amount"
+                    data-placeholder-zu="Elinye inani"
+                    placeholder="Other amount"
+                    min="1"
+                >
+                
+                <button class="paypal-btn" id="paypalBtn">
+                    <svg class="paypal-icon" viewBox="0 0 24 24">
+                        <path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.42 1.012 4.287-.023.143-.047.288-.077.437-.983 5.05-4.349 6.797-8.647 6.797h-2.19c-.524 0-.968.382-1.05.9l-1.12 7.106zm14.146-14.42a3.35 3.35 0 0 0-.607-.541c-.013.076-.026.175-.041.254-.93 4.778-4.005 7.201-9.138 7.201h-2.19a.563.563 0 0 0-.556.479l-1.187 7.527h3.574c.458 0 .847-.334.918-.788l.038-.194.73-4.627.047-.253a.929.929 0 0 1 .918-.788h.578c3.74 0 6.662-1.518 7.518-5.907.357-1.832.173-3.362-.602-4.363z"/>
+                    </svg>
+                    <span id="paypalBtnText" data-i18n="payWithPaypal">Pay with PayPal</span>
+                </button>
+                
+                <p class="secure-note">Secure payment powered by PayPal</p>
+            </div>
+
+            <div class="success-state" id="tipSuccess" style="display: none;">
+                <div class="success-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                </div>
+                <p style="color: var(--primary); font-weight: 600;" data-i18n="thankYou">Thank you so much! Your support is truly appreciated!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Crystal Shop Modal (Shared) -->
+    <div class="modal" id="crystalShopModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <h2 class="modal-title mystical-text" data-i18n="buyCrystals">Buy Crystals</h2>
+            <p class="modal-subtitle"><span data-i18n="currentBalance">Current Balance</span>: <span id="modalCrystalCount">0</span> 💎</p>
+            <div class="crystal-packages">
+                <div class="package" data-package="5">
+                    <div class="package-crystals">5 💎</div>
+                    <div class="package-price">$0.99</div>
+                </div>
+                <div class="package popular" data-package="10">
+                    <div class="package-badge">Popular</div>
+                    <div class="package-crystals">10 💎</div>
+                    <div class="package-price">$1.49</div>
+                </div>
+                <div class="package" data-package="25">
+                    <div class="package-crystals">25 💎</div>
+                    <div class="package-price">$2.99</div>
+                </div>
+                <div class="package" data-package="50">
+                    <div class="package-crystals">50 💎</div>
+                    <div class="package-price">$4.99</div>
+                </div>
+                <div class="package" data-package="100">
+                    <div class="package-crystals">100 💎</div>
+                    <div class="package-price">$8.99</div>
+                </div>
+            </div>
+            <button class="btn-primary modal-buy-btn" id="modalBuyBtn" data-i18n="buyNow">Buy Now</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="tarot-data.js"></script>
+    <script src="i18n.js"></script>
+    <script src="crystal-store.js"></script>
+    <script src="deep-reading.js"></script>
+</body>
+</html>

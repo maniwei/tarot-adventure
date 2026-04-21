@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Inspiration - Tarot Healing</title>
+    <meta name="description" content="Discover your daily guidance through the wisdom of the tarot cards">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Daily Inspiration Specific Styles */
+        .inspiration-page {
+            background: #f2f6f5;
+            min-height: 100vh;
+            padding-top: 80px;
+            padding-bottom: 60px;
+        }
+
+        .inspiration-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        /* Header */
+        .inspiration-header {
+            text-align: center;
+            padding: 40px 0 32px;
+        }
+
+        .inspiration-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-family: 'Noto Serif SC', serif;
+        }
+
+        @media (min-width: 768px) {
+            .inspiration-title {
+                font-size: 2.5rem;
+            }
+        }
+
+        .inspiration-subtitle {
+            color: var(--text-light);
+            font-size: 1.05rem;
+        }
+
+        /* Tabs */
+        .tabs-container {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        .tab-btn {
+            padding: 12px 24px;
+            border-radius: 9999px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid #e0e8e6;
+            background: white;
+            color: var(--text-light);
+        }
+
+        .tab-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Daily Card Section */
+        .daily-card-container {
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+
+        .daily-card-header {
+            background: var(--primary);
+            color: white;
+            text-align: center;
+            padding: 24px 20px;
+        }
+
+        .daily-card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-family: 'Noto Serif SC', serif;
+        }
+
+        .daily-card-date {
+            font-size: 0.95rem;
+            opacity: 0.85;
+        }
+
+        .daily-card-body {
+            padding: 40px 24px;
+            text-align: center;
+        }
+
+        .daily-card-image {
+            width: 160px;
+            aspect-ratio: 2/3;
+            margin: 0 auto 28px;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        @media (min-width: 768px) {
+            .daily-card-image {
+                width: 200px;
+            }
+        }
+
+        .daily-card-image img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .daily-card-name {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 12px;
+            font-family: 'Noto Serif SC', serif;
+        }
+
+        .daily-card-keywords {
+            color: var(--text-light);
+            font-size: 1.05rem;
+            margin-bottom: 28px;
+            font-style: italic;
+        }
+
+        .btn-refresh {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--primary);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 9999px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-refresh:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        .btn-refresh svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .btn-refresh.spinning svg {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* News Section */
+        .news-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .news-item {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .news-item:hover {
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .news-date {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-bottom: 8px;
+        }
+
+        .news-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-family: 'Noto Serif SC', serif;
+        }
+
+        .news-excerpt {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        /* Article Detail */
+        .article-detail {
+            background: white;
+            border-radius: 24px;
+            padding: 32px 24px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .article-back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--primary);
+            font-weight: 500;
+            margin-bottom: 24px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .article-back-btn:hover {
+            color: var(--primary-dark);
+        }
+
+        .article-back-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .article-date {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 12px;
+        }
+
+        .article-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-family: 'Noto Serif SC', serif;
+        }
+
+        .article-content {
+            color: var(--text);
+            line-height: 1.9;
+            font-size: 1.05rem;
+        }
+
+        .article-content p {
+            margin-bottom: 16px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <nav class="header-nav">
+                <a href="index.html" class="logo">
+                    <svg class="logo-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93s3.05-7.44 7-7.93v15.86zm2-15.86c1.03.13 2 .45 2.87.93H13v-.93zM13 7h5.24c.25.31.48.65.68 1H13V7zm0 3h6.74c.08.33.15.66.19 1H13v-1zm0 9.93V19h2.87c-.87.48-1.84.8-2.87.93zM18.24 17H13v-1h5.92c-.2.35-.43.69-.68 1zm1.5-3H13v-1h6.93c-.04.34-.11.67-.19 1z"/>
+                    </svg>
+                    <span class="logo-text mystical-text">Tarot Healing</span>
+                </a>
+
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link" data-i18n="home">Home</a></li>
+                    <li><a href="tarot-quest.html" class="nav-link" data-i18n="tarotQuest">Tarot Quest</a></li>
+                    <li><a href="deep-reading.html" class="nav-link" data-i18n="deepReading">Deep Reading</a></li>
+                    <li><a href="card-library.html" class="nav-link" data-i18n="cardLibrary">Card Library</a></li>
+                    <li><a href="lucky-draw.html" class="nav-link" data-i18n="luckyDraw">Lucky Draw</a></li>
+                </ul>
+
+                <div class="header-actions">
+                    <div class="lang-switcher">
+                        <button class="lang-btn active" data-lang="en">EN</button>
+                        <button class="lang-btn" data-lang="zu">ZU</button>
+                    </div>
+                    <button class="crystal-btn" id="crystalBtn">
+                        <span class="crystal-icon">💎</span>
+                        <span class="crystal-count" id="crystalCount">0</span>
+                        <span class="crystal-plus">+</span>
+                    </button>
+                    <button class="signin-btn" data-i18n="signIn">Sign In</button>
+                    <button class="mobile-menu-btn" id="mobileMenuBtn">
+                        <svg class="menu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
+            </nav>
+
+            <div class="mobile-menu" id="mobileMenu">
+                <div class="mobile-lang-switcher">
+                    <button class="mobile-lang-btn active" data-lang="en">English</button>
+                    <button class="mobile-lang-btn" data-lang="zu">isiZulu</button>
+                </div>
+                <ul class="mobile-nav-list">
+                    <li><a href="index.html" class="mobile-nav-link" data-i18n="home">Home</a></li>
+                    <li><a href="tarot-quest.html" class="mobile-nav-link" data-i18n="tarotQuest">Tarot Quest</a></li>
+                    <li><a href="deep-reading.html" class="mobile-nav-link" data-i18n="deepReading">Deep Reading</a></li>
+                    <li><a href="card-library.html" class="mobile-nav-link" data-i18n="cardLibrary">Card Library</a></li>
+                    <li><a href="lucky-draw.html" class="mobile-nav-link" data-i18n="luckyDraw">Lucky Draw</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="inspiration-page">
+        <div class="inspiration-container">
+            <!-- Header -->
+            <div class="inspiration-header">
+                <h1 class="inspiration-title mystical-text" data-i18n="dailyInspirationTitle">Daily Tarot Inspiration</h1>
+                <div class="section-divider"></div>
+                <p class="inspiration-subtitle" data-i18n="dailyInspirationDesc">Discover your daily guidance through the wisdom of the tarot cards</p>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs-container">
+                <button class="tab-btn active" data-tab="inspiration" data-i18n="dailyCard">Daily Card</button>
+                <button class="tab-btn" data-tab="news" data-i18n="tarotNews">Tarot News</button>
+            </div>
+
+            <!-- Daily Card Tab -->
+            <div class="tab-content active" id="inspirationTab">
+                <div class="daily-card-container">
+                    <div class="daily-card-header">
+                        <h3 class="daily-card-title" data-i18n="dailyInspiration">Daily Inspiration</h3>
+                        <p class="daily-card-date" id="currentDate"></p>
+                    </div>
+                    <div class="daily-card-body">
+                        <div class="daily-card-image" id="dailyCardImage">
+                            <img src="" alt="Daily Card" id="cardImg">
+                        </div>
+                        <h2 class="daily-card-name" id="dailyCardName"></h2>
+                        <p class="daily-card-keywords" id="dailyCardKeywords"></p>
+                        <button class="btn-refresh" id="refreshBtn">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                            </svg>
+                            <span data-i18n="getNewInspiration">Get New Inspiration</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- News Tab -->
+            <div class="tab-content" id="newsTab">
+                <div class="news-list" id="newsList">
+                    <!-- News items will be rendered here -->
+                </div>
+            </div>
+
+            <!-- Article Detail -->
+            <div class="tab-content" id="articleTab">
+                <div class="article-detail" id="articleDetail">
+                    <div class="article-back-btn" id="backToNews">
+                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                        </svg>
+                        <span data-i18n="backToNews">Back to News</span>
+                    </div>
+                    <p class="article-date" id="articleDate"></p>
+                    <h2 class="article-title" id="articleTitle"></h2>
+                    <div class="article-content" id="articleContent"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Crystal Shop Modal -->
+    <div class="modal" id="crystalShopModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <h2 class="modal-title mystical-text" data-i18n="buyCrystals">Buy Crystals</h2>
+            <p class="modal-subtitle"><span data-i18n="currentBalance">Current Balance</span>: <span id="modalCrystalCount">0</span> 💎</p>
+            <div class="crystal-packages">
+                <div class="package" data-package="5">
+                    <div class="package-crystals">5 💎</div>
+                    <div class="package-price">$0.99</div>
+                </div>
+                <div class="package popular" data-package="10">
+                    <div class="package-badge">Popular</div>
+                    <div class="package-crystals">10 💎</div>
+                    <div class="package-price">$1.49</div>
+                </div>
+                <div class="package" data-package="25">
+                    <div class="package-crystals">25 💎</div>
+                    <div class="package-price">$2.99</div>
+                </div>
+                <div class="package" data-package="50">
+                    <div class="package-crystals">50 💎</div>
+                    <div class="package-price">$4.99</div>
+                </div>
+                <div class="package" data-package="100">
+                    <div class="package-crystals">100 💎</div>
+                    <div class="package-price">$8.99</div>
+                </div>
+            </div>
+            <button class="btn-primary modal-buy-btn" id="modalBuyBtn" data-i18n="buyNow">Buy Now</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="tarot-data.js"></script>
+    <script src="i18n.js"></script>
+    <script src="crystal-store.js"></script>
+    <script src="daily-inspiration.js"></script>
+</body>
+</html>

@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarot Quest - Interactive Tarot Adventure | Tarot Healing</title>
+    <meta name="description" content="Embark on an interactive tarot adventure with crystal rewards and deep storytelling">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Tarot Quest Specific Styles */
+        .quest-page {
+            background: linear-gradient(135deg, #29474e 0%, #3d6b63 100%);
+            min-height: 100vh;
+            padding-top: 80px;
+            padding-bottom: 40px;
+        }
+
+        /* Control Panel */
+        .control-panel {
+            background: rgba(61, 107, 99, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 32px;
+            border: 1px solid rgba(95, 198, 167, 0.3);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+        }
+
+        .control-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .control-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .btn-gold {
+            background: linear-gradient(135deg, #e8ac3a 0%, #d4a76a 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 9999px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-gold:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .btn-gold:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-teal {
+            background: #4a9a8a;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 9999px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-teal:hover {
+            background: #317f6e;
+        }
+
+        .probability-control {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        .probability-control input[type="range"] {
+            width: 128px;
+            accent-color: #5fc6a7;
+        }
+
+        .crystal-display {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .crystal-badge {
+            background: #4a9a8a;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 9999px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .btn-buy-crystals {
+            background: linear-gradient(135deg, #e8ac3a 0%, #d4a76a 100%);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            animation: pulse-border 2s infinite;
+        }
+
+        @keyframes pulse-border {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(232, 172, 58, 0.4); }
+            50% { box-shadow: 0 0 0 4px rgba(232, 172, 58, 0.2); }
+        }
+
+        /* Card Display Area */
+        .card-display {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 40px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+
+        .card-slot {
+            width: 140px;
+            aspect-ratio: auto;
+            background: transparent;
+            border-radius: 12px;
+            box-shadow: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            overflow: visible;
+            position: relative;
+            gap: 8px;
+        }
+
+        @media (min-width: 768px) {
+            .card-slot {
+                width: 180px;
+            }
+        }
+
+        .card-slot.empty {
+            background: rgba(255, 255, 255, 0.1);
+            width: 140px;
+            aspect-ratio: 2/3;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (min-width: 768px) {
+            .card-slot.empty {
+                width: 180px;
+            }
+        }
+
+        .card-slot.empty::before {
+            content: '?';
+            font-size: 3rem;
+            color: #4a9a8a;
+        }
+
+        .card-slot.drawing {
+            animation: pulse 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .card-content {
+            position: relative;
+            width: 140px;
+            aspect-ratio: 2/3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            background: white;
+        }
+
+        @media (min-width: 768px) {
+            .card-content {
+                width: 180px;
+            }
+        }
+
+        .card-slot img {
+            display: block;
+            width: 100%;
+            height: 85%;
+            object-fit: cover;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .card-unlock-btn {
+            width: 140px;
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            background: linear-gradient(135deg, #4a9a8a 0%, #2d6f64 100%);
+            color: white;
+            border: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(74, 154, 138, 0.3);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            z-index: 10;
+            position: relative;
+            pointer-events: auto;
+        }
+
+        @media (min-width: 768px) {
+            .card-unlock-btn {
+                width: 180px;
+            }
+        }
+
+        .card-unlock-btn:hover:not(:disabled) {
+            background: linear-gradient(135deg, #5fc6a7 0%, #3d8b7d 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(74, 154, 138, 0.5);
+        }
+
+        .card-unlock-btn.card-paid-unlock {
+            background: linear-gradient(135deg, #4a9a8a 0%, #2d6f64 100%);
+            color: white;
+        }
+
+        .card-unlock-btn.card-paid-unlock:hover {
+            background: linear-gradient(135deg, #5fc6a7 0%, #3d8b7d 100%);
+        }
+
+        .card-unlock-btn:disabled,
+        .card-unlock-btn.unlocked {
+            background: rgba(34, 197, 94, 0.3);
+            color: #86efac;
+            cursor: default;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .card-unlock-btn.unlocked {
+            font-size: 0.7rem;
+        }
+
+        .card-info-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            padding: 12px;
+            text-align: center;
+        }
+
+        .card-position {
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .card-name {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.75rem;
+        }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 24px;
+        }
+
+        @media (min-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+
+        /* Glass Panel */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid rgba(95, 198, 167, 0.3);
+        }
+
+        .panel-title {
+            color: white;
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Noto Serif SC', serif;
+        }
+
+        .panel-content {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Hints List */
+        .hints-list {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+
+        .hints-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 12px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .hint-card-name {
+            color: #5fc6a7;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        /* Unlock Button */
+        .btn-unlock {
+            width: 100%;
+            background: linear-gradient(135deg, #4a9a8a 0%, #5fc6a7 100%);
+            color: white;
+            padding: 14px 24px;
+            border-radius: 9999px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            animation: pulse-border 2s infinite;
+            margin-bottom: 20px;
+        }
+
+        .btn-unlock:hover {
+            opacity: 0.9;
+        }
+
+        /* Story Display */
+        .card-story-display {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid rgba(95, 198, 167, 0.2);
+        }
+
+        .story-header {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(95, 198, 167, 0.2);
+        }
+
+        .story-card-thumb {
+            width: 80px;
+            height: 120px;
+            border-radius: 8px;
+            object-fit: cover;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .story-header-info h3 {
+            color: white;
+            font-size: 1.1rem;
+            margin: 0 0 4px 0;
+            font-weight: 600;
+        }
+
+        .story-position {
+            color: #5fc6a7;
+            font-size: 0.85rem;
+            margin: 4px 0;
+            font-weight: 600;
+        }
+
+        .story-keywords {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.8rem;
+            margin: 4px 0 0 0;
+        }
+
+        .story-content {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+            line-height: 1.8;
+            white-space: pre-line;
+        }
+
+        .story-content p {
+            margin: 8px 0;
+        }
+
+        /* Deep Story Area */
+        .deep-story {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 16px;
+            white-space: pre-line;
+            line-height: 1.8;
+        }
+
+        /* Adventure Maps */
+        .map-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .map-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .map-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .map-name {
+            color: white;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .map-cost {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.85rem;
+        }
+
+        .map-desc {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.85rem;
+            margin-bottom: 12px;
+        }
+
+        .btn-map-unlock {
+            padding: 6px 16px;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-map-unlock.available {
+            background: #4a9a8a;
+            color: white;
+        }
+
+        .btn-map-unlock.available:hover {
+            background: #317f6e;
+        }
+
+        .btn-map-unlock.unlocked {
+            background: rgba(34, 197, 94, 0.2);
+            color: #86efac;
+            cursor: default;
+        }
+
+        /* Share Section */
+        .share-section {
+            margin-top: 24px;
+        }
+
+        .btn-share {
+            background: #4a9a8a;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 9999px;
+            font-size: 0.9rem;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            animation: pulse-border 2s infinite;
+        }
+
+        .btn-share:hover {
+            background: #317f6e;
+        }
+
+        /* Journal Section */
+        .journal-section {
+            margin-top: 24px;
+        }
+
+        .journal-entries {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        /* Reversed Card Styling */
+        .card-slot.reversed img {
+            transform: rotate(180deg);
+        }
+
+        .reversed-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(220, 38, 38, 0.8);
+            color: white;
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        /* Unlock Story Button Styles */
+        .btn-unlock {
+            width: 100%;
+            padding: 12px 24px;
+            margin-top: 16px;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        /* Free unlock button - special style */
+        .btn-unlock.free-unlock {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            box-shadow: 0 0 20px rgba(245, 158, 11, 0.4);
+            animation: pulse-gold 2s infinite;
+        }
+
+        .btn-unlock.free-unlock:hover {
+            box-shadow: 0 0 30px rgba(245, 158, 11, 0.6);
+            transform: translateY(-2px);
+        }
+
+        @keyframes pulse-gold {
+            0%, 100% { box-shadow: 0 0 20px rgba(245, 158, 11, 0.4); }
+            50% { box-shadow: 0 0 30px rgba(245, 158, 11, 0.6); }
+        }
+
+        /* Paid unlock button - regular style */
+        .btn-unlock.paid-unlock {
+            background: linear-gradient(135deg, #4a9a8a 0%, #5fc6a7 100%);
+            color: white;
+        }
+
+        .btn-unlock.paid-unlock:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        .btn-unlock:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <nav class="header-nav">
+                <a href="index.html" class="logo">
+                    <svg class="logo-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93s3.05-7.44 7-7.93v15.86zm2-15.86c1.03.13 2 .45 2.87.93H13v-.93z"/>
+                    </svg>
+                    <span class="logo-text mystical-text">Tarot Healing</span>
+                </a>
+
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link" data-i18n="home">Home</a></li>
+                    <li><a href="tarot-quest.html" class="nav-link active" data-i18n="tarotQuest">Tarot Quest</a></li>
+                    <li><a href="deep-reading.html" class="nav-link" data-i18n="deepReading">Deep Reading</a></li>
+                    <li><a href="card-library.html" class="nav-link" data-i18n="cardLibrary">Card Library</a></li>
+                    <li><a href="lucky-draw.html" class="nav-link" data-i18n="luckyDraw">Lucky Draw</a></li>
+                </ul>
+
+                <div class="header-actions">
+                    <div class="lang-switcher">
+                        <button class="lang-btn active" data-lang="en">EN</button>
+                        <button class="lang-btn" data-lang="zu">ZU</button>
+                    </div>
+                    <button class="crystal-btn" id="crystalBtn">
+                        <span class="crystal-icon">💎</span>
+                        <span class="crystal-count" id="crystalCount">0</span>
+                        <span class="crystal-plus">+</span>
+                    </button>
+                    <button class="signin-btn" data-i18n="signIn">Sign In</button>
+                    <button class="mobile-menu-btn" id="mobileMenuBtn">
+                        <svg class="menu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
+            </nav>
+
+            <div class="mobile-menu" id="mobileMenu">
+                <div class="mobile-lang-switcher">
+                    <button class="mobile-lang-btn active" data-lang="en">English</button>
+                    <button class="mobile-lang-btn" data-lang="zu">isiZulu</button>
+                </div>
+                <ul class="mobile-nav-list">
+                    <li><a href="index.html" class="mobile-nav-link" data-i18n="home">Home</a></li>
+                    <li><a href="tarot-quest.html" class="mobile-nav-link active" data-i18n="tarotQuest">Tarot Quest</a></li>
+                    <li><a href="deep-reading.html" class="mobile-nav-link" data-i18n="deepReading">Deep Reading</a></li>
+                    <li><a href="card-library.html" class="mobile-nav-link" data-i18n="cardLibrary">Card Library</a></li>
+                    <li><a href="lucky-draw.html" class="mobile-nav-link" data-i18n="luckyDraw">Lucky Draw</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="quest-page">
+        <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 16px;">
+            <!-- Control Panel -->
+            <div class="control-panel">
+                <div class="control-row">
+                    <button class="btn-gold" id="drawCardsBtn" data-i18n="drawTodaysCards">Draw Today's 3 Cards</button>
+                    <button class="btn-teal" id="shuffleBtn" data-i18n="shuffleDeck">Shuffle Deck</button>
+                    <button class="btn-teal" id="openMapBtn" data-i18n="openAdventureMap">Open Adventure Map</button>
+                </div>
+                <div class="control-row" style="justify-content: space-between;">
+                    <div class="probability-control">
+                        <span data-i18n="reverseProbability">Reverse probability</span>: <span id="reverseValue">40</span>%
+                        <input type="range" id="reverseSlider" min="0" max="100" value="40">
+                    </div>
+                    <div class="crystal-display">
+                        <div class="crystal-badge">
+                            <span>💎</span>
+                            <span data-i18n="crystals">Crystals</span>: <span id="crystalCountDisplay">0</span>
+                        </div>
+                        <button class="btn-buy-crystals" id="buyCrystalsBtn" data-i18n="buyCrystals">Buy Crystals</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Display -->
+            <div class="card-display" id="cardDisplay">
+                <div class="card-slot empty" data-position="past" data-i18n-attr="data-position" data-position-en="Past" data-position-zu="Isidlule"></div>
+                <div class="card-slot empty" data-position="present" data-i18n-attr="data-position" data-position-en="Present" data-position-zu="Samanje"></div>
+                <div class="card-slot empty" data-position="future" data-i18n-attr="data-position" data-position-en="Future" data-position-zu="Esizayo"></div>
+            </div>
+
+            <!-- Content Grid -->
+            <div class="content-grid">
+                <!-- Left Column: Reading -->
+                <div class="glass-panel">
+                    <h3 class="panel-title">
+                        <span>🔮</span>
+                        <span data-i18n="shortHints">Short Hints</span>
+                    </h3>
+                    <div class="panel-content" id="hintsContent">
+                        <p data-i18n="drawHint">Draw three cards to get short hints. Click 'Unlock Deep Story' to get the full cinematic reading.</p>
+                    </div>
+
+<!-- Individual card unlock buttons are now displayed on each card -->
+                      <button class="btn-unlock" id="unlockStoryBtn" style="display: none;" data-i18n="unlockFullStory">
+                        Unlock Full Story
+                    </button>
+
+                    <h4 class="panel-title" style="font-size: 1.1rem; margin-top: 24px;">
+                        <span>📜</span>
+                        <span data-i18n="deepStory">Deep Story</span>
+                    </h4>
+                    <div class="panel-content">
+                        <div class="deep-story" id="deepStoryContent" data-i18n="storyHint">
+                            Unlock a full 500-800 word story by spending crystals.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Maps & Features -->
+                <div>
+                    <!-- Adventure Maps -->
+                    <div class="glass-panel">
+                        <h4 class="panel-title">
+                            <span>🗺️</span>
+                            <span data-i18n="adventureMaps">Adventure Maps</span>
+                        </h4>
+                        
+                        <div class="map-item">
+                            <div class="map-header">
+                                <span class="map-name">🌹 <span data-i18n="loversGarden">Lovers' Garden</span></span>
+                                <span class="map-cost"><span data-i18n="cost">Cost</span>: 3 💎</span>
+                            </div>
+                            <p class="map-desc" data-i18n="loversDesc">Emotion & relationships themed readings — romantic imagery, relational guidance.</p>
+                            <button class="btn-map-unlock available" data-map="lovers" data-cost="3" data-i18n="unlock">Unlock</button>
+                        </div>
+
+                        <div class="map-item">
+                            <div class="map-header">
+                                <span class="map-name">🏢 <span data-i18n="towerWealth">Tower of Wealth</span></span>
+                                <span class="map-cost"><span data-i18n="cost">Cost</span>: 3 💎</span>
+                            </div>
+                            <p class="map-desc" data-i18n="wealthDesc">Career & money themes — practical action steps and prosperity mindset.</p>
+                            <button class="btn-map-unlock available" data-map="wealth" data-cost="3" data-i18n="unlock">Unlock</button>
+                        </div>
+
+                        <div class="map-item">
+                            <div class="map-header">
+                                <span class="map-name">🌲 <span data-i18n="soulForest">Soul Forest</span></span>
+                                <span class="map-cost"><span data-i18n="cost">Cost</span>: 3 💎</span>
+                            </div>
+                            <p class="map-desc" data-i18n="soulDesc">Inner growth & healing journeys — reflective and restorative narratives.</p>
+                            <button class="btn-map-unlock available" data-map="soul" data-cost="3" data-i18n="unlock">Unlock</button>
+                        </div>
+                    </div>
+
+                    <!-- Share Section -->
+                    <div class="glass-panel share-section">
+                        <h4 class="panel-title" style="margin-bottom: 12px;">
+                            <span>📱</span>
+                            <span data-i18n="shareInvite">Share / Invite</span>
+                        </h4>
+                        <p class="panel-content" style="font-size: 0.9rem; margin-bottom: 16px;" data-i18n="shareDesc">
+                            Share your draw with a mysterious line. Friends who open your link get a one-time free draw.
+                        </p>
+                        <button class="btn-share" id="shareBtn">
+                            <span>🔗</span>
+                            <span data-i18n="shareSnapshot">Share Snapshot</span>
+                        </button>
+                    </div>
+
+                    <!-- Journal Section -->
+                    <div class="glass-panel journal-section">
+                        <h4 class="panel-title" style="margin-bottom: 12px;">
+                            <span>📖</span>
+                            <span data-i18n="yourJournal">Your Journal</span>
+                        </h4>
+                        <div class="journal-entries" id="journalEntries" data-i18n="noEntries">
+                            No entries yet
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Crystal Shop Modal -->
+    <div class="modal" id="crystalShopModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <h2 class="modal-title mystical-text" data-i18n="buyCrystals">Buy Crystals</h2>
+            <p class="modal-subtitle"><span data-i18n="currentBalance">Current Balance</span>: <span id="modalCrystalCount">0</span> 💎</p>
+            <div class="crystal-packages">
+                <div class="package" data-package="5">
+                    <div class="package-crystals">5 💎</div>
+                    <div class="package-price">$0.99</div>
+                </div>
+                <div class="package popular" data-package="10">
+                    <div class="package-badge">Popular</div>
+                    <div class="package-crystals">10 💎</div>
+                    <div class="package-price">$1.49</div>
+                </div>
+                <div class="package" data-package="25">
+                    <div class="package-crystals">25 💎</div>
+                    <div class="package-price">$2.99</div>
+                </div>
+                <div class="package" data-package="50">
+                    <div class="package-crystals">50 💎</div>
+                    <div class="package-price">$4.99</div>
+                </div>
+                <div class="package" data-package="100">
+                    <div class="package-crystals">100 💎</div>
+                    <div class="package-price">$8.99</div>
+                </div>
+            </div>
+            <button class="btn-primary modal-buy-btn" id="modalBuyBtn" data-i18n="buyNow">Buy Now</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="tarot-data.js"></script>
+    <script src="i18n.js"></script>
+    <script src="crystal-store.js"></script>
+    <script src="quest.js"></script>
+    <script src="quest-init.js"></script>
+    <script>
+        // Update year
+        document.getElementById('year') && (document.getElementById('year').textContent = new Date().getFullYear());
+    </script>
+</body>
+</html>

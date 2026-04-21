@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarot Healing - Spiritual Card Readings</title>
+    <meta name="description" content="Blending ancient tarot wisdom with African spirituality for insightful guidance and inner peace">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .card-info {
+            padding: 14px;
+            text-align: center;
+            background: rgba(30, 30, 30, 0.9);
+        }
+
+        .card-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 6px;
+            font-family: 'Noto Serif SC', serif;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .card-category {
+            display: inline-block;
+            padding: 4px 10px;
+            background: rgba(212, 175, 55, 0.15);
+            color: var(--primary);
+            font-size: 0.75rem;
+            border-radius: 9999px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+        /* 解锁的故事 */
+
+        /* Fold Icon Animation */
+        .fold-icon {
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            float: right;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+        }
+
+        .fold-icon.rotated {
+            transform: rotate(90deg);
+        }
+
+        .fold-icon svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* Story Item Content Animation */
+        .story-item-content {
+            max-height: auto;
+            overflow: hidden;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+            opacity: 1;
+        }
+
+        .story-item-content.collapsed {
+            max-height: 0;
+            opacity: 0;
+        }
+
+        .unlcok-story-item {
+            background: rgba(37, 37, 37, 0.8);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .unlcok-story-item h4 {
+            text-align: left;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .story-item-desc {
+            color: var(--text-light);
+            text-align: left;
+            margin-top: .625rem;
+        }
+        .unloack-story-cards {
+            /* display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3.125rem; */
+            margin-top: 1.25rem;
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            flex-wrap: wrap;
+            align-items: flex-start;
+        }
+        /* 卡片样式 */
+        .card-slot {
+            width: 140px;
+            aspect-ratio: auto;
+            background: transparent;
+            border-radius: 12px;
+            box-shadow: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            overflow: visible;
+            position: relative;
+            gap: 8px;
+        }
+        .card-content {
+            position: relative;
+            width: 140px;
+            aspect-ratio: 2/3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            background: white;
+        }
+        .card-slot img {
+            display: block;
+            width: 100%;
+            height: 85%;
+            object-fit: cover;
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .card-unlock-btn {
+            width: 140px;
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            cursor: pointer;
+            background: linear-gradient(135deg, #4a9a8a 0%, #2d6f64 100%);
+            color: white;
+            border: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(74, 154, 138, 0.3);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            z-index: 10;
+            position: relative;
+            pointer-events: auto;
+        }
+        .card-info-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            padding: 12px;
+            text-align: center;
+        }
+
+        .card-position {
+            color: white;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .card-name {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.75rem;
+        }
+
+        .card-slot.reversed img {
+            transform: rotate(180deg);
+        }
+
+        .reversed-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: rgba(220, 38, 38, 0.8);
+            color: white;
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+
+        .check-detail-btn {
+            width: 100%;
+            /* background: rgba(34, 197, 94, 0.3);
+            color: #86efac; */
+            cursor: pointer;
+            box-shadow: none;
+            transform: none;
+            font-size: 0.7rem;
+            background: linear-gradient(135deg, #4a9a8a 0%, #5fc6a7 100%);
+            color: white;
+
+            /* width: 140px; */
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-weight: 600;
+        }
+        .check-detail-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+        .view-deep-btn {
+            padding: 12px 24px;
+            margin-top: 16px;
+            margin-bottom: 20px;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            background: linear-gradient(135deg, #4a9a8a 0%, #5fc6a7 100%);
+            color: white;
+            margin-left: 20px;
+        }
+        .view-deep-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+
+        /* Adventure Maps Styles */
+        .unlock-maps-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .map-item {
+            background: rgba(37, 37, 37, 0.8);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .map-item:hover {
+            border-color: rgba(212, 175, 55, 0.4);
+            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .map-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .map-name {
+            color: var(--secondary);
+            font-size: 1.2rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Noto Serif SC', serif;
+        }
+
+        .map-cost {
+            color: var(--primary);
+            font-size: 0.95rem;
+            font-weight: 500;
+            background: rgba(212, 175, 55, 0.15);
+            padding: 6px 12px;
+            border-radius: 9999px;
+            border: 1px solid rgba(212, 175, 55, 0.3);
+        }
+
+        .map-desc {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 16px;
+            text-align: left;
+        }
+
+        .map-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .map-status.unlocked {
+            background: rgba(34, 197, 94, 0.2);
+            color: #86efac;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .map-status.locked {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .no-maps-message {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-light);
+        }
+
+        .no-maps-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        /* No Stories Message Styles */
+        .no-stories-message {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-light);
+        }
+
+        .no-stories-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        /* No Cards Message Styles */
+        .no-cards-message {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-light);
+        }
+
+        .no-cards-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <nav class="header-nav">
+                <!-- Logo -->
+                <a href="index.html" class="logo">
+                    <svg class="logo-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93s3.05-7.44 7-7.93v15.86zm2-15.86c1.03.13 2 .45 2.87.93H13v-.93zM13 7h5.24c.25.31.48.65.68 1H13V7zm0 3h6.74c.08.33.15.66.19 1H13v-1zm0 9.93V19h2.87c-.87.48-1.84.8-2.87.93zM18.24 17H13v-1h5.92c-.2.35-.43.69-.68 1zm1.5-3H13v-1h6.93c-.04.34-.11.67-.19 1z"/>
+                    </svg>
+                    <span class="logo-text mystical-text">Tarot Healing</span>
+                </a>
+
+                <!-- Desktop Navigation -->
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link" data-i18n="home">Home</a></li>
+                    <li><a href="tarot-quest.html" class="nav-link" data-i18n="tarotQuest">Tarot Quest</a></li>
+                    <li><a href="deep-reading.html" class="nav-link" data-i18n="deepReading">Deep Reading</a></li>
+                    <li><a href="card-library.html" class="nav-link" data-i18n="cardLibrary">Card Library</a></li>
+                    <li><a href="lucky-draw.html" class="nav-link" data-i18n="luckyDraw">Lucky Draw</a></li>
+                    <li><a href="personal-center.html" class="nav-link active" data-i18n="personalCenter">Personal Center</a></li>
+                </ul>
+
+                <!-- Right Side Actions -->
+                <div class="header-actions">
+                    <!-- Language Switcher -->
+                    <div class="lang-switcher">
+                        <button class="lang-btn active" data-lang="en">EN</button>
+                        <button class="lang-btn" data-lang="zu">ZU</button>
+                    </div>
+
+                    <!-- Crystal Balance -->
+                    <button class="crystal-btn" id="crystalBtn">
+                        <span class="crystal-icon">💎</span>
+                        <span class="crystal-count" id="crystalCount">0</span>
+                        <span class="crystal-plus">+</span>
+                    </button>
+
+                    <!-- Sign In Button -->
+                    <button class="signin-btn" data-i18n="signIn">Sign In</button>
+
+                    <!-- Mobile Menu Button -->
+                    <button class="mobile-menu-btn" id="mobileMenuBtn">
+                        <svg class="menu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
+            </nav>
+
+            <!-- Mobile Navigation -->
+            <div class="mobile-menu" id="mobileMenu">
+                <div class="mobile-lang-switcher">
+                    <button class="mobile-lang-btn active" data-lang="en">English</button>
+                    <button class="mobile-lang-btn" data-lang="zu">isiZulu</button>
+                </div>
+                <ul class="mobile-nav-list">
+                    <li><a href="index.html" class="mobile-nav-link" data-i18n="home">Home</a></li>
+                    <li><a href="tarot-quest.html" class="mobile-nav-link" data-i18n="tarotQuest">Tarot Quest</a></li>
+                    <li><a href="deep-reading.html" class="mobile-nav-link" data-i18n="deepReading">Deep Reading</a></li>
+                    <li><a href="card-library.html" class="mobile-nav-link" data-i18n="cardLibrary">Card Library</a></li>
+                    <li><a href="lucky-draw.html" class="mobile-nav-link" data-i18n="luckyDraw">Lucky Draw</a></li>
+                    <li><a href="daily-inspiration.html" class="mobile-nav-link" data-i18n="dailyInspiration">Daily Inspiration</a></li>
+                    <li><a href="personal-center.html" class="mobile-nav-link active" data-i18n="personalCenter">Personal Center</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Unlock Card Section -->
+        <section class="unlock-card-section">
+            <div class="unlock-card-box">
+                <h3 class="unlock-card-box-title" data-i18n="unlockCards">Unlock Cards</h3>
+                <div class="unlock-cards-list" id="unlockCrads">
+                </div>
+                <!-- No Results -->
+                <div class="no-cards-message" id="noCardResults" style="display: none;">
+                    <div class="no-cards-icon">🔍</div>
+                    <p>No cards unlocked yet. Visit Tarot Quest to unlock cards!</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Unlock Card Section -->
+        <section class="unlock-card-section">
+            <div class="unlock-card-box">
+                <h3 class="unlock-card-box-title" data-i18n="unlockStorys">Unlock Storys</h3>
+                <div class="unlock-story-list" id="unlockStorys">
+                </div>
+            </div>
+        </section>
+
+        <!-- Unlock Adventure Maps Section -->
+        <section class="unlock-card-section">
+            <div class="unlock-card-box">
+                <h3 class="unlock-card-box-title" data-i18n="unlockMaps">Unlock Adventure Maps</h3>
+                <div class="unlock-maps-list" id="unlockMaps">
+                    <!-- Maps will be dynamically loaded here -->
+                </div>
+            </div>
+        </section>
+
+        
+
+    </main>
+
+    <!-- Card Detail Modal -->
+    <div class="modal card-modal" id="cardModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close-btn" id="modalClose">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+            <div class="card-modal-body" id="cardModalBody">
+                <!-- Modal content will be rendered here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <!-- About Section -->
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93s3.05-7.44 7-7.93v15.86zm2-15.86c1.03.13 2 .45 2.87.93H13v-.93zM13 7h5.24c.25.31.48.65.68 1H13V7zm0 3h6.74c.08.33.15.66.19 1H13v-1zm0 9.93V19h2.87c-.87.48-1.84.8-2.87.93zM18.24 17H13v-1h5.92c-.2.35-.43.69-.68 1zm1.5-3H13v-1h6.93c-.04.34-.11.67-.19 1z"/>
+                        </svg>
+                        <span class="mystical-text">Tarot Healing</span>
+                    </div>
+                    <p class="footer-desc" data-i18n="aboutDesc">Blending ancient tarot wisdom with African spirituality for insightful guidance and inner peace.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                        </a>
+                        <a href="#" class="social-link">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.057-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        </a>
+                        <a href="#" class="social-link">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm3.066 9.067c.006.131.006.263.006.395 0 4.043-3.078 8.705-8.706 8.705-1.727 0-3.337-.507-4.688-1.373.249.029.483.042.733.042 1.43 0 2.746-.49 3.793-1.314-1.336-.028-2.464-.904-2.851-2.116.188.028.376.044.572.044.277 0 .549-.04.805-.112-1.396-.28-2.447-1.512-2.447-2.992v-.039c.41.228.879.366 1.378.384-.82-.548-1.36-1.483-1.36-2.543 0-.561.152-1.085.416-1.536 1.504 1.848 3.757 3.062 6.295 3.19-.051-.225-.078-.458-.078-.698 0-1.686 1.367-3.054 3.054-3.054.879 0 1.673.371 2.23.966.696-.137 1.354-.392 1.945-.744-.228.712-.712 1.312-1.343 1.691.62-.073 1.21-.235 1.759-.475-.41.614-.932 1.152-1.528 1.582z"/></svg>
+                        </a>
+                        <a href="#" class="social-link">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm4.441 16.892c-2.102.144-6.784.144-8.883 0C5.282 16.736 5.017 15.622 5 12c.017-3.629.285-4.736 2.558-4.892 2.099-.144 6.782-.144 8.883 0C18.718 7.264 18.982 8.378 19 12c-.018 3.629-.285 4.736-2.559 4.892zM10 9.658l4.917 2.338L10 14.342V9.658z"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Explore Links -->
+                <div class="footer-links">
+                    <h3 class="footer-title" data-i18n="explore">Explore</h3>
+                    <div class="footer-divider"></div>
+                    <ul class="footer-list">
+                        <li><a href="deep-reading.html" data-i18n="tarotReadings">Tarot Readings</a></li>
+                        <li><a href="card-library.html" data-i18n="learningResources">Learning Resources</a></li>
+                        <li><a href="daily-inspiration.html" data-i18n="blogArticles">Blog & Articles</a></li>
+                        <li><a href="index.html" data-i18n="meditationGuides">Meditation Guides</a></li>
+                    </ul>
+                </div>
+
+                <!-- Support Links -->
+                <div class="footer-links">
+                    <h3 class="footer-title" data-i18n="support">Support</h3>
+                    <div class="footer-divider"></div>
+                    <ul class="footer-list">
+                        <li><a href="#" data-i18n="faq">FAQ</a></li>
+                        <li><a href="#" data-i18n="privacyPolicy">Privacy Policy</a></li>
+                        <li><a href="#" data-i18n="termsOfService">Terms of Service</a></li>
+                        <li><a href="#" data-i18n="contactUs">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; <span id="year"></span> Tarot Healing. <span data-i18n="copyright">All rights reserved.</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Crystal Shop Modal -->
+    <div class="modal" id="crystalShopModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <h2 class="modal-title mystical-text" data-i18n="buyCrystals">Buy Crystals</h2>
+            <p class="modal-subtitle"><span data-i18n="currentBalance">Current Balance</span>: <span id="modalCrystalCount">0</span> 💎</p>
+            <div class="crystal-packages">
+                <div class="package" data-package="5">
+                    <div class="package-crystals">5 💎</div>
+                    <div class="package-price">$0.99</div>
+                </div>
+                <div class="package popular" data-package="10">
+                    <div class="package-badge">Popular</div>
+                    <div class="package-crystals">10 💎</div>
+                    <div class="package-price">$1.49</div>
+                </div>
+                <div class="package" data-package="25">
+                    <div class="package-crystals">25 💎</div>
+                    <div class="package-price">$2.99</div>
+                </div>
+                <div class="package" data-package="50">
+                    <div class="package-crystals">50 💎</div>
+                    <div class="package-price">$4.99</div>
+                </div>
+                <div class="package" data-package="100">
+                    <div class="package-crystals">100 💎</div>
+                    <div class="package-price">$8.99</div>
+                </div>
+            </div>
+            <button class="btn-primary modal-buy-btn" data-i18n="buyNow">Buy Now</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="tarot-data.js"></script>
+    <script src="i18n.js"></script>
+    <!-- <script src="data-manager.js"></script> -->
+    <script src="crystal-store.js"></script>
+    <script src="main.js"></script>
+    <script src="personal-center.js"></script>
+    <script>
+        // Update year
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

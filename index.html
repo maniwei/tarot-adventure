@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tarot Healing - Spiritual Card Readings</title>
+    <meta name="description" content="Blending ancient tarot wisdom with African spirituality for insightful guidance and inner peace">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <nav class="header-nav">
+                <!-- Logo -->
+                <a href="index.html" class="logo">
+                    <svg class="logo-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93s3.05-7.44 7-7.93v15.86zm2-15.86c1.03.13 2 .45 2.87.93H13v-.93zM13 7h5.24c.25.31.48.65.68 1H13V7zm0 3h6.74c.08.33.15.66.19 1H13v-1zm0 9.93V19h2.87c-.87.48-1.84.8-2.87.93zM18.24 17H13v-1h5.92c-.2.35-.43.69-.68 1zm1.5-3H13v-1h6.93c-.04.34-.11.67-.19 1z"/>
+                    </svg>
+                    <span class="logo-text mystical-text">Tarot Healing</span>
+                </a>
+
+                <!-- Desktop Navigation -->
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link active" data-i18n="home">Home</a></li>
+                    <li><a href="tarot-quest.html" class="nav-link" data-i18n="tarotQuest">Tarot Quest</a></li>
+                    <li><a href="deep-reading.html" class="nav-link" data-i18n="deepReading">Deep Reading</a></li>
+                    <li><a href="card-library.html" class="nav-link" data-i18n="cardLibrary">Card Library</a></li>
+                    <li><a href="lucky-draw.html" class="nav-link" data-i18n="luckyDraw">Lucky Draw</a></li>
+                    <li><a href="personal-center.html" class="nav-link" data-i18n="personalCenter">Personal Center</a></li>
+                </ul>
+
+                <!-- Right Side Actions -->
+                <div class="header-actions">
+                    <!-- Language Switcher -->
+                    <div class="lang-switcher">
+                        <button class="lang-btn active" data-lang="en">EN</button>
+                        <button class="lang-btn" data-lang="zu">ZU</button>
+                    </div>
+
+                    <!-- Crystal Balance -->
+                    <button class="crystal-btn" id="crystalBtn">
+                        <span class="crystal-icon">💎</span>
+                        <span class="crystal-count" id="crystalCount">0</span>
+                        <span class="crystal-plus">+</span>
+                    </button>
+
+                    <!-- Sign In Button -->
+                    <button class="signin-btn" data-i18n="signIn">Sign In</button>
+
+                    <!-- Mobile Menu Button -->
+                    <button class="mobile-menu-btn" id="mobileMenuBtn">
+                        <svg class="menu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
+            </nav>
+
+            <!-- Mobile Navigation -->
+            <div class="mobile-menu" id="mobileMenu">
+                <div class="mobile-lang-switcher">
+                    <button class="mobile-lang-btn active" data-lang="en">English</button>
+                    <button class="mobile-lang-btn" data-lang="zu">isiZulu</button>
+                </div>
+                <ul class="mobile-nav-list">
+                    <li><a href="index.html" class="mobile-nav-link active" data-i18n="home">Home</a></li>
+                    <li><a href="tarot-quest.html" class="mobile-nav-link" data-i18n="tarotQuest">Tarot Quest</a></li>
+                    <li><a href="deep-reading.html" class="mobile-nav-link" data-i18n="deepReading">Deep Reading</a></li>
+                    <li><a href="card-library.html" class="mobile-nav-link" data-i18n="cardLibrary">Card Library</a></li>
+                    <li><a href="lucky-draw.html" class="mobile-nav-link" data-i18n="luckyDraw">Lucky Draw</a></li>
+                    <li><a href="daily-inspiration.html" class="mobile-nav-link" data-i18n="dailyInspiration">Daily Inspiration</a></li>
+                    <li><a href="personal-center.html" class="mobile-nav-link" data-i18n="personalCenter">Personal Center</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-bg">
+                <img src="https://ext.same-assets.com/2618794310/1359253305.jpeg" alt="Tarot meditation background" class="hero-img">
+                <div class="hero-gradient"></div>
+            </div>
+            <div class="hero-content">
+                <div class="hero-box">
+                    <h1 class="hero-title mystical-text" data-i18n="heroTitle">Discover Harmony Through Tarot</h1>
+                    <p class="hero-subtitle" data-i18n="heroSubtitle">Blending ancient tarot wisdom with African spirituality for insightful guidance and inner peace</p>
+                    <div class="hero-buttons">
+                        <a href="deep-reading.html" class="btn-primary" data-i18n="beginJourney">Begin Your Journey</a>
+                        <a href="card-library.html" class="btn-outline" data-i18n="exploreCards">Explore Cards</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Path to Enlightenment Section -->
+        <section class="path-section">
+            <div class="section-header">
+                <h2 class="section-title mystical-text" data-i18n="pathToEnlightenment">The Path to Enlightenment</h2>
+                <div class="section-divider"></div>
+                <p class="section-subtitle" data-i18n="pathDescription">Our approach combines traditional tarot with spiritual principles to provide thoughtful guidance</p>
+            </div>
+
+            <div class="feature-grid">
+                <!-- Tarot Quest Card -->
+                <a href="tarot-quest.html" class="feature-card">
+                    <div class="feature-icon">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                        </svg>
+                    </div>
+                    <h3 class="feature-title mystical-text" data-i18n="tarotQuestTitle">Tarot Quest</h3>
+                    <p class="feature-desc" data-i18n="tarotQuestDesc">Embark on an interactive tarot adventure with crystal rewards, card challenges, and deep storytelling experiences.</p>
+                    <div class="feature-btn-wrapper">
+                        <span class="feature-btn">
+                            <svg viewBox="0 0 20 20" fill="currentColor">
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                            </svg>
+                            <span data-i18n="startQuest">Start Quest</span>
+                        </span>
+                    </div>
+                </a>
+
+                <!-- Deep Reading Card -->
+                <a href="deep-reading.html" class="feature-card">
+                    <div class="feature-icon feature-icon-alt">
+                        <div class="feature-icon-inner"></div>
+                    </div>
+                    <h3 class="feature-title mystical-text" data-i18n="deepReadingTitle">Deep Reading</h3>
+                    <p class="feature-desc" data-i18n="deepReadingDesc">Experience comprehensive tarot readings with detailed interpretations, personal guidance, and spiritual insights.</p>
+                    <div class="feature-btn-wrapper">
+                        <span class="feature-btn">
+                            <svg viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
+                            </svg>
+                            <span data-i18n="getDeepReading">Get Deep Reading</span>
+                        </span>
+                    </div>
+                </a>
+            </div>
+        </section>
+
+        <!-- Deep Reading Experience Section -->
+        <section class="reading-section">
+            <div class="reading-container">
+                <div class="reading-box">
+                    <div class="reading-header">
+                        <h2 class="reading-title mystical-text" data-i18n="experienceReading">Experience a Deep Reading</h2>
+                        <p class="reading-subtitle" data-i18n="chooseSpread">Choose a spread that resonates with your current needs</p>
+                    </div>
+
+                    <div class="spread-buttons">
+                        <button class="spread-btn active" data-spread="single" data-i18n="singleCard">Single Card</button>
+                        <button class="spread-btn" data-spread="three" data-i18n="threeCards">Three Cards</button>
+                        <button class="spread-btn" data-spread="celtic" data-i18n="celticCross">Celtic Cross</button>
+                        <button class="spread-btn" data-spread="relationship" data-i18n="relationship">Relationship</button>
+                    </div>
+
+                    <div class="draw-area" id="drawArea">
+                        <div class="draw-placeholder">
+                            <div class="draw-icon">?</div>
+                            <p class="draw-text" data-i18n="focusMind">Focus your mind on a question and draw cards for guidance</p>
+                        </div>
+                    </div>
+
+                    <div class="draw-button-wrapper">
+                        <button class="btn-primary" id="drawCardsBtn" data-i18n="drawCards">Draw Cards</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Card Library Preview Section -->
+        <section class="library-section">
+            <div class="section-header">
+                <h2 class="section-title mystical-text" data-i18n="cardLibraryTitle">Tarot Card Library</h2>
+                <div class="section-divider"></div>
+                <p class="section-subtitle" data-i18n="cardLibraryDesc">Explore the meanings and symbolism of each card in our deck</p>
+            </div>
+
+            <div class="filter-buttons">
+                <button class="filter-btn active" data-filter="all" data-i18n="allCards">All Cards</button>
+                <button class="filter-btn" data-filter="major" data-i18n="majorArcana">Major Arcana</button>
+                <button class="filter-btn" data-filter="minor" data-i18n="minorArcana">Minor Arcana</button>
+                <button class="filter-btn" data-filter="wands" data-i18n="wands">Wands</button>
+                <button class="filter-btn" data-filter="cups" data-i18n="cups">Cups</button>
+                <button class="filter-btn" data-filter="swords" data-i18n="swords">Swords</button>
+                <button class="filter-btn" data-filter="pentacles" data-i18n="pentacles">Pentacles</button>
+            </div>
+
+            <div class="card-grid" id="cardGrid">
+                <!-- Cards will be loaded by JavaScript -->
+            </div>
+
+            <div class="view-all-wrapper">
+                <a href="card-library.html" class="view-all-link">
+                    <span data-i18n="viewAllCards">View All 78 Cards</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                </a>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="testimonials-section">
+            <div class="testimonials-container">
+                <div class="section-header">
+                    <h2 class="section-title mystical-text" data-i18n="wordsOfHarmony">Words of Harmony</h2>
+                    <div class="section-divider"></div>
+                    <p class="section-subtitle" data-i18n="testimonialsDesc">What others have experienced on their tarot journey with us</p>
+                </div>
+
+                <div class="testimonial-grid">
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">"The Zen approach to tarot brought a sense of calm and clarity I hadn't found with other readings. It felt less like fortune-telling and more like thoughtful guidance."</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">S</div>
+                            <div class="author-info">
+                                <p class="author-name">Sarah Jenkins</p>
+                                <p class="author-location">London, UK</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">"I've always been interested in both tarot and Eastern philosophy. Finding a site that blends both so beautifully has been transformative for my meditation practice."</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">M</div>
+                            <div class="author-info">
+                                <p class="author-name">Michael Chen</p>
+                                <p class="author-location">Toronto, Canada</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="testimonial-card">
+                        <p class="testimonial-text">"The readings here have a different quality—more reflective and less predictive. It's helped me approach decisions with more mindfulness and less anxiety."</p>
+                        <div class="testimonial-author">
+                            <div class="author-avatar">E</div>
+                            <div class="author-info">
+                                <p class="author-name">Emma Rodriguez</p>
+                                <p class="author-location">Melbourne, Australia</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <!-- About Section -->
+                <div class="footer-about">
+                    <div class="footer-logo">
+                        <svg viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93s3.05-7.44 7-7.93v15.86zm2-15.86c1.03.13 2 .45 2.87.93H13v-.93zM13 7h5.24c.25.31.48.65.68 1H13V7zm0 3h6.74c.08.33.15.66.19 1H13v-1zm0 9.93V19h2.87c-.87.48-1.84.8-2.87.93zM18.24 17H13v-1h5.92c-.2.35-.43.69-.68 1zm1.5-3H13v-1h6.93c-.04.34-.11.67-.19 1z"/>
+                        </svg>
+                        <span class="mystical-text">Tarot Healing</span>
+                    </div>
+                    <p class="footer-desc" data-i18n="aboutDesc">Blending ancient tarot wisdom with African spirituality for insightful guidance and inner peace.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                        </a>
+                        <a href="#" class="social-link">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        </a>
+                        <a href="#" class="social-link">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm3.066 9.067c.006.131.006.263.006.395 0 4.043-3.078 8.705-8.706 8.705-1.727 0-3.337-.507-4.688-1.373.249.029.483.042.733.042 1.43 0 2.746-.49 3.793-1.314-1.336-.028-2.464-.904-2.851-2.116.188.028.376.044.572.044.277 0 .549-.04.805-.112-1.396-.28-2.447-1.512-2.447-2.992v-.039c.41.228.879.366 1.378.384-.82-.548-1.36-1.483-1.36-2.543 0-.561.152-1.085.416-1.536 1.504 1.848 3.757 3.062 6.295 3.19-.051-.225-.078-.458-.078-.698 0-1.686 1.367-3.054 3.054-3.054.879 0 1.673.371 2.23.966.696-.137 1.354-.392 1.945-.744-.228.712-.712 1.312-1.343 1.691.62-.073 1.21-.235 1.759-.475-.41.614-.932 1.152-1.528 1.582z"/></svg>
+                        </a>
+                        <a href="#" class="social-link">
+                            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm4.441 16.892c-2.102.144-6.784.144-8.883 0C5.282 16.736 5.017 15.622 5 12c.017-3.629.285-4.736 2.558-4.892 2.099-.144 6.782-.144 8.883 0C18.718 7.264 18.982 8.378 19 12c-.018 3.629-.285 4.736-2.559 4.892zM10 9.658l4.917 2.338L10 14.342V9.658z"/></svg>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Explore Links -->
+                <div class="footer-links">
+                    <h3 class="footer-title" data-i18n="explore">Explore</h3>
+                    <div class="footer-divider"></div>
+                    <ul class="footer-list">
+                        <li><a href="deep-reading.html" data-i18n="tarotReadings">Tarot Readings</a></li>
+                        <li><a href="card-library.html" data-i18n="learningResources">Learning Resources</a></li>
+                        <li><a href="daily-inspiration.html" data-i18n="blogArticles">Blog & Articles</a></li>
+                        <li><a href="index.html" data-i18n="meditationGuides">Meditation Guides</a></li>
+                    </ul>
+                </div>
+
+                <!-- Support Links -->
+                <div class="footer-links">
+                    <h3 class="footer-title" data-i18n="support">Support</h3>
+                    <div class="footer-divider"></div>
+                    <ul class="footer-list">
+                        <li><a href="#" data-i18n="faq">FAQ</a></li>
+                        <li><a href="#" data-i18n="privacyPolicy">Privacy Policy</a></li>
+                        <li><a href="#" data-i18n="termsOfService">Terms of Service</a></li>
+                        <li><a href="#" data-i18n="contactUs">Contact Us</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; <span id="year"></span> Tarot Healing. <span data-i18n="copyright">All rights reserved.</span></p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Crystal Shop Modal -->
+    <div class="modal" id="crystalShopModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <h2 class="modal-title mystical-text" data-i18n="buyCrystals">Buy Crystals</h2>
+            <p class="modal-subtitle"><span data-i18n="currentBalance">Current Balance</span>: <span id="modalCrystalCount">0</span> 💎</p>
+            <div class="crystal-packages">
+                <div class="package" data-package="5">
+                    <div class="package-crystals">5 💎</div>
+                    <div class="package-price">$0.99</div>
+                </div>
+                <div class="package popular" data-package="10">
+                    <div class="package-badge">Popular</div>
+                    <div class="package-crystals">10 💎</div>
+                    <div class="package-price">$1.49</div>
+                </div>
+                <div class="package" data-package="25">
+                    <div class="package-crystals">25 💎</div>
+                    <div class="package-price">$2.99</div>
+                </div>
+                <div class="package" data-package="50">
+                    <div class="package-crystals">50 💎</div>
+                    <div class="package-price">$4.99</div>
+                </div>
+                <div class="package" data-package="100">
+                    <div class="package-crystals">100 💎</div>
+                    <div class="package-price">$8.99</div>
+                </div>
+            </div>
+            <button class="btn-primary modal-buy-btn" data-i18n="buyNow">Buy Now</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="tarot-data.js"></script>
+    <script src="i18n.js"></script>
+    <script src="crystal-store.js"></script>
+    <script src="main.js"></script>
+    <script>
+        // Update year
+        document.getElementById('year').textContent = new Date().getFullYear();
+    </script>
+</body>
+</html>

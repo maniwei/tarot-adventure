@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lucky Draw - Fortune Reading | Tarot Healing</title>
+    <meta name="description" content="Draw your daily fortune with Tarot Healing. Free daily draws with crystal rewards.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Lucky Draw Specific Styles */
+        .lucky-page {
+            background: #f2f6f5;
+            min-height: 100vh;
+            padding-top: 80px;
+            padding-bottom: 60px;
+        }
+
+        .lucky-container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        /* Daily Limit Bar */
+        .limit-bar {
+            background: white;
+            border-radius: 16px;
+            padding: 20px 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .limit-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .limit-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, #e8f5f1 0%, #d8ebe6 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .limit-text h4 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .limit-text p {
+            font-size: 0.85rem;
+            color: #6a6a6a;
+        }
+
+        .limit-count {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .limit-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #e0e8e6;
+            transition: all 0.3s ease;
+        }
+
+        .limit-dot.active {
+            background: var(--primary);
+            box-shadow: 0 0 8px rgba(74, 154, 138, 0.4);
+        }
+
+        .limit-dot.used {
+            background: #cbd5e1;
+        }
+
+        /* Main Draw Card */
+        .draw-card {
+            background: white;
+            border-radius: 24px;
+            padding: 40px 24px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        /* Fortune Deity */
+        .deity-container {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 28px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #f5e6d3 0%, #e8d4c0 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .deity-container::before {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .deity-image {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+        }
+
+        .deity-container.shaking {
+            animation: shake 0.5s ease-in-out infinite;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0) rotate(0deg); }
+            25% { transform: translateX(-5px) rotate(-2deg); }
+            75% { transform: translateX(5px) rotate(2deg); }
+        }
+
+        /* Draw Instruction */
+        .draw-instruction {
+            color: #4a4a4a;
+            font-size: 1.05rem;
+            margin-bottom: 28px;
+            font-style: italic;
+        }
+
+        /* Draw Button Area */
+        .draw-controls {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .btn-draw {
+            background: linear-gradient(135deg, var(--primary) 0%, #317f6e 100%);
+            color: white;
+            padding: 16px 36px;
+            border-radius: 9999px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 16px rgba(74, 154, 138, 0.3);
+        }
+
+        .btn-draw:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 154, 138, 0.4);
+        }
+
+        .btn-draw:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-draw.spinning::after {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .btn-secondary {
+            background: #e8f5f1;
+            color: var(--primary);
+            padding: 16px 28px;
+            border-radius: 9999px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: #d8ebe6;
+        }
+
+        /* Cost Indicator */
+        .cost-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(212, 167, 106, 0.15);
+            color: var(--secondary);
+            padding: 8px 16px;
+            border-radius: 9999px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin-top: 16px;
+        }
+
+        /* Fortune Result */
+        .fortune-result {
+            background: white;
+            border-radius: 24px;
+            padding: 32px 24px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            margin-bottom: 24px;
+            animation: fadeIn 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fortune-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--secondary);
+            text-align: center;
+            margin-bottom: 24px;
+            font-family: 'Noto Serif SC', serif;
+        }
+
+        .fortune-poem {
+            background: #f8f5f0;
+            border-radius: 16px;
+            padding: 28px 24px;
+            margin-bottom: 28px;
+            text-align: center;
+        }
+
+        .fortune-poem p {
+            color: #1a1a1a;
+            font-size: 1.1rem;
+            line-height: 2;
+            font-style: italic;
+            font-family: 'Noto Serif SC', serif;
+            white-space: pre-line;
+        }
+
+        /* Guidance Grid */
+        .guidance-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .guidance-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        @media (min-width: 640px) {
+            .guidance-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+
+        .guidance-item {
+            background: #f8faf9;
+            border-radius: 12px;
+            padding: 16px 12px;
+            text-align: center;
+        }
+
+        .guidance-label {
+            font-size: 0.7rem;
+            color: #6a6a6a;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .guidance-value {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        /* Donation Section */
+        .donation-card {
+            background: white;
+            border-radius: 24px;
+            padding: 32px 24px;
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+        }
+
+        .donation-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 8px;
+            font-family: 'Noto Serif SC', serif;
+        }
+
+        .donation-subtitle {
+            color: #6a6a6a;
+            text-align: center;
+            font-size: 0.95rem;
+            margin-bottom: 24px;
+        }
+
+        .donation-amounts {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .donation-btn {
+            padding: 12px 24px;
+            border-radius: 9999px;
+            font-weight: 600;
+            border: 2px solid #e0e8e6;
+            background: white;
+            color: #4a4a4a;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .donation-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .donation-btn.selected {
+            background: var(--primary);
+            border-color: var(--primary);
+            color: white;
+        }
+
+        .donation-custom {
+            width: 100px;
+            padding: 12px;
+            border: 2px solid #e0e8e6;
+            border-radius: 9999px;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .donation-custom:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .donation-note {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #6a6a6a;
+            margin-top: 16px;
+            font-style: italic;
+        }
+
+        /* Pay with Crystals Button */
+        .btn-crystal-pay {
+            background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 9999px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 10px;
+        }
+
+        .btn-crystal-pay:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-container">
+            <nav class="header-nav">
+                <a href="index.html" class="logo">
+                    <svg class="logo-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93s3.05-7.44 7-7.93v15.86zm2-15.86c1.03.13 2 .45 2.87.93H13v-.93z"/>
+                    </svg>
+                    <span class="logo-text mystical-text">Tarot Healing</span>
+                </a>
+
+                <ul class="nav-menu">
+                    <li><a href="index.html" class="nav-link" data-i18n="home">Home</a></li>
+                    <li><a href="tarot-quest.html" class="nav-link" data-i18n="tarotQuest">Tarot Quest</a></li>
+                    <li><a href="deep-reading.html" class="nav-link" data-i18n="deepReading">Deep Reading</a></li>
+                    <li><a href="card-library.html" class="nav-link" data-i18n="cardLibrary">Card Library</a></li>
+                    <li><a href="lucky-draw.html" class="nav-link active" data-i18n="luckyDraw">Lucky Draw</a></li>
+                </ul>
+
+                <div class="header-actions">
+                    <div class="lang-switcher">
+                        <button class="lang-btn active" data-lang="en">EN</button>
+                        <button class="lang-btn" data-lang="zu">ZU</button>
+                    </div>
+                    <button class="crystal-btn" id="crystalBtn">
+                        <span class="crystal-icon">💎</span>
+                        <span class="crystal-count" id="crystalCount">0</span>
+                        <span class="crystal-plus">+</span>
+                    </button>
+                    <button class="signin-btn" data-i18n="signIn">Sign In</button>
+                    <button class="mobile-menu-btn" id="mobileMenuBtn">
+                        <svg class="menu-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                    </button>
+                </div>
+            </nav>
+
+            <div class="mobile-menu" id="mobileMenu">
+                <div class="mobile-lang-switcher">
+                    <button class="mobile-lang-btn active" data-lang="en">English</button>
+                    <button class="mobile-lang-btn" data-lang="zu">isiZulu</button>
+                </div>
+                <ul class="mobile-nav-list">
+                    <li><a href="index.html" class="mobile-nav-link" data-i18n="home">Home</a></li>
+                    <li><a href="tarot-quest.html" class="mobile-nav-link" data-i18n="tarotQuest">Tarot Quest</a></li>
+                    <li><a href="deep-reading.html" class="mobile-nav-link" data-i18n="deepReading">Deep Reading</a></li>
+                    <li><a href="card-library.html" class="mobile-nav-link" data-i18n="cardLibrary">Card Library</a></li>
+                    <li><a href="lucky-draw.html" class="mobile-nav-link active" data-i18n="luckyDraw">Lucky Draw</a></li>
+                </ul>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="lucky-page">
+        <div class="lucky-container">
+            <!-- Daily Limit Bar -->
+            <div class="limit-bar" id="limitBar">
+                <div class="limit-info">
+                    <div class="limit-icon">🎲</div>
+                    <div class="limit-text">
+                        <h4 data-i18n="dailyFreeDraws">Daily Free Draws</h4>
+                        <p id="limitText">2 remaining today</p>
+                    </div>
+                </div>
+                <div class="limit-count">
+                    <div class="limit-dot active" id="dot1"></div>
+                    <div class="limit-dot active" id="dot2"></div>
+                </div>
+            </div>
+
+            <!-- Main Draw Card -->
+            <div class="draw-card" id="drawSection">
+                <!-- Fortune Deity -->
+                <div class="deity-container" id="deityContainer">
+                    <img src="https://ext.same-assets.com/2618794310/3736968142.png" alt="Fortune deity" class="deity-image">
+                </div>
+
+                <p class="draw-instruction" data-i18n="fortuneDesc">Please focus on your question with sincere heart, then click to draw</p>
+
+                <div class="draw-controls">
+                    <button class="btn-draw" id="drawBtn" data-i18n="drawFortune">Draw Fortune</button>
+                    <button class="btn-secondary" id="resetBtn" style="display: none;" data-i18n="drawAgain">Draw Again</button>
+                </div>
+
+                <div class="cost-indicator" id="costIndicator" style="display: none;">
+                    <span>💎</span>
+                    <span>5 <span data-i18n="crystals">Crystals</span></span>
+                </div>
+            </div>
+
+            <!-- Fortune Result -->
+            <div class="fortune-result" id="fortuneResult" style="display: none;">
+                <h2 class="fortune-title" id="fortuneTitle"></h2>
+                
+                <div class="fortune-poem">
+                    <p id="fortunePoem"></p>
+                </div>
+
+                <h4 class="guidance-title" data-i18n="lifeGuidance">Life Guidance</h4>
+                
+                <div class="guidance-grid">
+                    <div class="guidance-item">
+                        <div class="guidance-label" data-i18n="career">Career</div>
+                        <div class="guidance-value" id="guidanceCareer"></div>
+                    </div>
+                    <div class="guidance-item">
+                        <div class="guidance-label" data-i18n="love">Love</div>
+                        <div class="guidance-value" id="guidanceLove"></div>
+                    </div>
+                    <div class="guidance-item">
+                        <div class="guidance-label" data-i18n="health">Health</div>
+                        <div class="guidance-value" id="guidanceHealth"></div>
+                    </div>
+                    <div class="guidance-item">
+                        <div class="guidance-label" data-i18n="wealth">Wealth</div>
+                        <div class="guidance-value" id="guidanceWealth"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Donation Section -->
+            <div class="donation-card">
+                <h3 class="donation-title" data-i18n="gratitudeDonation">Gratitude Donation Box</h3>
+                <p class="donation-subtitle" data-i18n="donationDesc">Your support helps us continue providing quality services</p>
+
+                <div class="donation-amounts">
+                    <button class="donation-btn selected" data-amount="5">$5</button>
+                    <button class="donation-btn" data-amount="10">$10</button>
+                    <button class="donation-btn" data-amount="20">$20</button>
+                    <button class="donation-btn" data-amount="50">$50</button>
+                    <input type="number" class="donation-custom" id="donationCustom" data-i18n-attr="placeholder" data-placeholder-en="Other" data-placeholder-zu="Okunye" placeholder="Other" min="1">
+                </div>
+
+                <div style="text-align: center;">
+                    <button class="btn-primary" id="donateBtn" data-i18n="donateNow">Donate Now (PayPal)</button>
+                </div>
+
+                <p class="donation-note" data-i18n="donationNote">* All donations support website maintenance and content updates</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Crystal Shop Modal -->
+    <div class="modal" id="crystalShopModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <h2 class="modal-title mystical-text" data-i18n="buyCrystals">Buy Crystals</h2>
+            <p class="modal-subtitle"><span data-i18n="currentBalance">Current Balance</span>: <span id="modalCrystalCount">0</span> 💎</p>
+            <div class="crystal-packages">
+                <div class="package" data-package="5">
+                    <div class="package-crystals">5 💎</div>
+                    <div class="package-price">$0.99</div>
+                </div>
+                <div class="package popular" data-package="10">
+                    <div class="package-badge">Popular</div>
+                    <div class="package-crystals">10 💎</div>
+                    <div class="package-price">$1.49</div>
+                </div>
+                <div class="package" data-package="25">
+                    <div class="package-crystals">25 💎</div>
+                    <div class="package-price">$2.99</div>
+                </div>
+                <div class="package" data-package="50">
+                    <div class="package-crystals">50 💎</div>
+                    <div class="package-price">$4.99</div>
+                </div>
+                <div class="package" data-package="100">
+                    <div class="package-crystals">100 💎</div>
+                    <div class="package-price">$8.99</div>
+                </div>
+            </div>
+            <button class="btn-primary modal-buy-btn" id="modalBuyBtn" data-i18n="buyNow">Buy Now</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="tarot-data.js"></script>
+    <script src="i18n.js"></script>
+    <script src="crystal-store.js"></script>
+    <script src="lucky-draw.js"></script>
+</body>
+</html>
