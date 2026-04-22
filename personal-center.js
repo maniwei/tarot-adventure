@@ -26,16 +26,19 @@ const unlockStorys = document.getElementById('unlockStorys');
 const unlockMaps = document.getElementById('unlockMaps');
 const cardModal = document.getElementById('cardModal');
 const cardModalBody = document.getElementById('cardModalBody');
-const modalClose = document.getElementById('modalClose');
+const cardModalClose = document.getElementById('cardModalClose');
+// const modalClose = document.getElementById('modalClose');
 function initPersonalCenter () {
     renderCards();
     renderStorys();
     renderMaps();
     setupFoldAnimation();
     setupCheckDetailButtons();
-    if (modalClose) {
-        modalClose.addEventListener('click', closeCardModal);
-    }
+    if (cardModalClose) cardModalClose.addEventListener('click', closeCardModal);
+    // Crystal shop
+    // if (crystalBtn) crystalBtn.addEventListener('click', openCrystalShop);
+    // if (modalClose) modalClose.addEventListener('click', closeCrystalShop);
+    // if (modalBuyBtn) modalBuyBtn.addEventListener('click', handleCrystalPurchase);
 }
 
 // Setup fold icon animation
@@ -531,5 +534,8 @@ May you find the clarity and peace you seek.
     }
 }
 
+
 // Initialize on load
-document.addEventListener('DOMContentLoaded', initPersonalCenter);
+document.addEventListener('DOMContentLoaded', () => {
+    initPersonalCenter();
+});

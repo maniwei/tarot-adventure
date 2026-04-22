@@ -82,18 +82,32 @@ function initCrystalShop() {
     crystalBtn.addEventListener('click', () => {
       modal.classList.add('active');
       updateCrystalDisplay();
+      packages.forEach(p => {
+        p.classList.remove('selected');
+        if (p.dataset.package === '10') { 
+          p.classList.add('popular');
+          const badge = p.querySelector('.package-badge');
+          if (badge) {
+            badge.style.display = 'block';
+          }
+        }
+      });
     });
   }
 
   if (modalClose) {
     modalClose.addEventListener('click', () => {
       modal.classList.remove('active');
+      selectedPackage = null;
+      document.querySelectorAll('.package').forEach(p => p.classList.remove('selected'));
     });
   }
 
   if (overlay) {
     overlay.addEventListener('click', () => {
       modal.classList.remove('active');
+      selectedPackage = null;
+      document.querySelectorAll('.package').forEach(p => p.classList.remove('selected'));
     });
   }
 
@@ -101,9 +115,23 @@ function initCrystalShop() {
   if (packages) {
     packages.forEach(pkg => {
       pkg.addEventListener('click', () => {
-        packages.forEach(p => p.classList.remove('selected'));
+        packages.forEach(p => {
+          p.classList.remove('selected');
+          p.classList.remove('popular');
+        });
         pkg.classList.add('selected');
         selectedPackage = pkg.dataset.package;
+        
+        // Hide all package badges first
+        document.querySelectorAll('.package-badge').forEach(badge => {
+          badge.style.display = 'none';
+        });
+        
+        // Show badge only for the selected package if it has one
+        const selectedBadge = pkg.querySelector('.package-badge');
+        if (selectedBadge) {
+          selectedBadge.style.display = '';
+        }
       });
     });
   }
@@ -116,7 +144,16 @@ function initCrystalShop() {
         alert(`Added ${selectedPackage} crystals!`);
         modal.classList.remove('active');
         selectedPackage = null;
-        packages.forEach(p => p.classList.remove('selected'));
+        packages.forEach(p => {
+          p.classList.remove('selected');
+          if (p.dataset.package === '10') { 
+            p.classList.add('popular');
+            const badge = p.querySelector('.package-badge');
+            if (badge) {
+              badge.style.display = 'block';
+            }
+          }
+        });
       } else {
         alert('Please select a package');
       }

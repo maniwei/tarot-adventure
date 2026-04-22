@@ -37,7 +37,7 @@ const mobileMenu = document.getElementById('mobileMenu');
 // Crystal Shop Modal Elements
 const crystalShopModal = document.getElementById('crystalShopModal');
 const shopModalClose = document.getElementById('shopModalClose');
-const modalBuyBtn = document.getElementById('modalBuyBtn');
+// const modalBuyBtn = document.getElementById('modalBuyBtn');
 
 // Initialize
 function initCardLibrary() {
@@ -54,9 +54,9 @@ function initCardLibrary() {
         modalClose.addEventListener('click', closeCardModal);
     }
 
-    if (crystalBtn) {
-        crystalBtn.addEventListener('click', openCrystalShop);
-    }
+    // if (crystalBtn) {
+    //     crystalBtn.addEventListener('click', openCrystalShop);
+    // }
 
     if (mobileMenuBtn) {
         mobileMenuBtn.addEventListener('click', toggleMobileMenu);
@@ -72,14 +72,14 @@ function initCardLibrary() {
         shopModalClose.addEventListener('click', closeCrystalShop);
     }
 
-    if (modalBuyBtn) {
-        modalBuyBtn.addEventListener('click', handleCrystalPurchase);
-    }
+    // if (modalBuyBtn) {
+    //     modalBuyBtn.addEventListener('click', handleCrystalPurchase);
+    // }
 
     // Package selection
-    document.querySelectorAll('.package').forEach(pkg => {
-        pkg.addEventListener('click', () => selectPackage(pkg));
-    });
+    // document.querySelectorAll('.package').forEach(pkg => {
+    //     pkg.addEventListener('click', () => selectPackage(pkg));
+    // });
 
     // Language switchers
     document.querySelectorAll('.lang-btn, .mobile-lang-btn').forEach(btn => {
@@ -87,12 +87,12 @@ function initCardLibrary() {
     });
 
     // Close modals on overlay click
-    document.querySelectorAll('.modal-overlay').forEach(overlay => {
-        overlay.addEventListener('click', () => {
-            closeCardModal();
-            closeCrystalShop();
-        });
-    });
+    // document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    //     overlay.addEventListener('click', () => {
+    //         closeCardModal();
+    //         closeCrystalShop();
+    //     });
+    // });
 }
 
 // Get filtered cards
@@ -288,12 +288,12 @@ function toggleMobileMenu() {
 // Crystal Shop Functions
 let selectedPackage = null;
 
-function openCrystalShop() {
-    if (crystalShopModal) {
-        crystalShopModal.classList.add('active');
-        updateCrystalDisplay();
-    }
-}
+// function openCrystalShop() {
+//     if (crystalShopModal) {
+//         crystalShopModal.classList.add('active');
+//         updateCrystalDisplay();
+//     }
+// }
 
 function closeCrystalShop() {
     if (crystalShopModal) {
@@ -303,27 +303,30 @@ function closeCrystalShop() {
     }
 }
 
-function selectPackage(pkg) {
-    document.querySelectorAll('.package').forEach(p => p.classList.remove('selected'));
-    pkg.classList.add('selected');
-    selectedPackage = pkg.dataset.package;
-}
+// function selectPackage(pkg) {
+//     document.querySelectorAll('.package').forEach(p => p.classList.remove('selected'));
+//     pkg.classList.add('selected');
+//     selectedPackage = pkg.dataset.package;
+// }
 
-function handleCrystalPurchase() {
-    const lang = localStorage.getItem('tarot-lang') || 'en';
+// function handleCrystalPurchase() {
+//     const lang = localStorage.getItem('tarot-lang') || 'en';
 
-    if (!selectedPackage) {
-        alert(getTranslation(lang, 'selectPackage') || 'Please select a package');
-        return;
-    }
+//     if (!selectedPackage) {
+//         alert(getTranslation(lang, 'selectPackage') || 'Please select a package');
+//         return;
+//     }
 
-    // Simulate purchase
-    addCrystals(parseInt(selectedPackage));
+//     // Simulate purchase
+//     addCrystals(parseInt(selectedPackage));
 
-    alert((lang === 'zu' ? 'Kungeziwe amakristali angama-' : 'Added ') + selectedPackage + ' crystals!');
+//     alert((lang === 'zu' ? 'Kungeziwe amakristali angama-' : 'Added ') + selectedPackage + ' crystals!');
 
-    closeCrystalShop();
-}
+//     closeCrystalShop();
+// }
 
 // Initialize on load
-document.addEventListener('DOMContentLoaded', initCardLibrary);
+document.addEventListener('DOMContentLoaded', () => {
+    initCardLibrary();
+    initCrystalShop();
+});

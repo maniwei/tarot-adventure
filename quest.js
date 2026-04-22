@@ -34,7 +34,7 @@ function initQuest() {
   unlockStoryBtn = document.getElementById('unlockStoryBtn');
   deepStoryContent = document.getElementById('deepStoryContent');
   buyCrystalsBtn = document.getElementById('buyCrystalsBtn');
-  crystalBtn = document.getElementById('crystalBtn');
+  // crystalBtn = document.getElementById('crystalBtn');
   shareBtn = document.getElementById('shareBtn');
   mobileMenuBtn = document.getElementById('mobileMenuBtn');
   mobileMenu = document.getElementById('mobileMenu');
@@ -42,7 +42,8 @@ function initQuest() {
   // Modal Elements
   modal = document.getElementById('crystalShopModal');
   modalClose = document.getElementById('modalClose');
-  modalBuyBtn = document.getElementById('modalBuyBtn');
+  // modalBuyBtn = document.getElementById('modalBuyBtn');
+  packages = modal?.querySelectorAll('.package');
   
   updateCrystalDisplay();
   loadLanguage();
@@ -63,11 +64,11 @@ function initQuest() {
   }
   // unlockStoryBtn is now handled per-card via card-unlock-btn
   if (buyCrystalsBtn) buyCrystalsBtn.addEventListener('click', openCrystalShop);
-  if (crystalBtn) crystalBtn.addEventListener('click', openCrystalShop);
+  // if (crystalBtn) crystalBtn.addEventListener('click', openCrystalShop);
   if (shareBtn) shareBtn.addEventListener('click', handleShare);
   if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', toggleMobileMenu);
-  if (modalClose) modalClose.addEventListener('click', closeCrystalShop);
-  if (modalBuyBtn) modalBuyBtn.addEventListener('click', handlePurchase);
+  // if (modalClose) modalClose.addEventListener('click', closeCrystalShop);
+  // if (modalBuyBtn) modalBuyBtn.addEventListener('click', handlePurchase);
 
   // Map unlock buttons
   document.querySelectorAll('.btn-map-unlock').forEach(btn => {
@@ -85,7 +86,7 @@ function initQuest() {
   });
 
   // Close modal on overlay click
-  document.querySelector('.modal-overlay')?.addEventListener('click', closeCrystalShop);
+  // document.querySelector('.modal-overlay')?.addEventListener('click', closeCrystalShop);
 }
 
 // Load saved language
@@ -631,38 +632,48 @@ function openCrystalShop() {
   if (modal) {
     modal.classList.add('active');
     updateCrystalDisplay();
+    packages.forEach(p => {
+      p.classList.remove('selected');
+      if (p.dataset.package === '10') { 
+        p.classList.add('popular');
+        const badge = p.querySelector('.package-badge');
+        if (badge) {
+          badge.style.display = 'block';
+        }
+      }
+    });
   }
 }
 
-function closeCrystalShop() {
-  if (modal) {
-    modal.classList.remove('active');
-    selectedPackage = null;
-    document.querySelectorAll('.package').forEach(p => p.classList.remove('selected'));
-  }
-}
+// function closeCrystalShop() {
+//   if (modal) {
+//     modal.classList.remove('active');
+//     selectedPackage = null;
+//     document.querySelectorAll('.package').forEach(p => p.classList.remove('selected'));
+//   }
+// }
 
-function selectPackage(pkg) {
-  document.querySelectorAll('.package').forEach(p => p.classList.remove('selected'));
-  pkg.classList.add('selected');
-  selectedPackage = pkg.dataset.package;
-}
+// function selectPackage(pkg) {
+//   document.querySelectorAll('.package').forEach(p => p.classList.remove('selected'));
+//   pkg.classList.add('selected');
+//   selectedPackage = pkg.dataset.package;
+// }
 
-function handlePurchase() {
-  if (!selectedPackage) {
-    const lang = localStorage.getItem('tarot-lang') || 'en';
-    alert(lang === 'zu' ? 'Sicela ukhethe iphakheji' : 'Please select a package');
-    return;
-  }
+// function handlePurchase() {
+//   if (!selectedPackage) {
+//     const lang = localStorage.getItem('tarot-lang') || 'en';
+//     alert(lang === 'zu' ? 'Sicela ukhethe iphakheji' : 'Please select a package');
+//     return;
+//   }
 
-  // Simulate purchase
-  addCrystals(parseInt(selectedPackage));
+//   // Simulate purchase
+//   addCrystals(parseInt(selectedPackage));
 
-  const lang = localStorage.getItem('tarot-lang') || 'en';
-  alert((lang === 'zu' ? 'Kungeziwe amakristali angama-' : 'Added ') + selectedPackage + ' crystals!');
+//   const lang = localStorage.getItem('tarot-lang') || 'en';
+//   alert((lang === 'zu' ? 'Kungeziwe amakristali angama-' : 'Added ') + selectedPackage + ' crystals!');
 
-  closeCrystalShop();
-}
+//   closeCrystalShop();
+// }
 
 // Get random cards
 function getRandomCards(count) {
@@ -671,4 +682,7 @@ function getRandomCards(count) {
 }
 
 // Initialize on load
-document.addEventListener('DOMContentLoaded', initQuest);
+document.addEventListener('DOMContentLoaded', () => {
+  initQuest();
+  initCrystalShop();
+});

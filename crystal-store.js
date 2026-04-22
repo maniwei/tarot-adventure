@@ -120,6 +120,99 @@ function getRemaineFreeDeepStoryViews() {
   return hasUsedFreeDeepStory() ? 0 : 1;
 }
 
+function initCrystalShop() {
+  const crystalBtn = document.getElementById('crystalBtn');
+  const modal = document.getElementById('crystalShopModal');
+  const modalClose = document.getElementById('modalClose');
+  const overlay = modal?.querySelector('.modal-overlay');
+  const packages = modal?.querySelectorAll('.package');
+  const buyBtn = modal?.querySelector('.modal-buy-btn');
+
+  let selectedPackage = null;
+
+  if (crystalBtn && modal) {
+    crystalBtn.addEventListener('click', () => {
+      modal.classList.add('active');
+      updateCrystalDisplay();
+      packages.forEach(p => {
+        p.classList.remove('selected');
+        if (p.dataset.package === '10') { 
+          p.classList.add('popular');
+          const badge = p.querySelector('.package-badge');
+          if (badge) {
+            badge.style.display = 'block';
+          }
+        }
+      });
+    });
+  }
+
+  if (modalClose) {
+    modalClose.addEventListener('click', () => {
+      modal.classList.remove('active');
+      selectedPackage = null;
+      document.querySelectorAll('.package').forEach(p => p.classList.remove('selected'));
+    });
+  }
+
+  if (overlay) {
+    overlay.addEventListener('click', () => {
+      modal.classList.remove('active');
+      selectedPackage = null;
+      document.querySelectorAll('.package').forEach(p => p.classList.remove('selected'));
+    });
+  }
+
+  // Package selection
+  if (packages) {
+    packages.forEach(pkg => {
+      pkg.addEventListener('click', () => {
+        packages.forEach(p => {
+          p.classList.remove('selected');
+          p.classList.remove('popular');
+        });
+        pkg.classList.add('selected');
+        selectedPackage = pkg.dataset.package;
+        
+        // Hide all package badges first
+        document.querySelectorAll('.package-badge').forEach(badge => {
+          badge.style.display = 'none';
+        });
+        
+        // Show badge only for the selected package if it has one
+        const selectedBadge = pkg.querySelector('.package-badge');
+        if (selectedBadge) {
+          selectedBadge.style.display = '';
+        }
+      });
+    });
+  }
+
+  // Buy button
+  if (buyBtn) {
+    buyBtn.addEventListener('click', () => {
+      if (selectedPackage) {
+        addCrystals(parseInt(selectedPackage, 10));
+        alert(`Added ${selectedPackage} crystals!`);
+        modal.classList.remove('active');
+        selectedPackage = null;
+        packages.forEach(p => {
+          p.classList.remove('selected');
+          if (p.dataset.package === '10') { 
+            p.classList.add('popular');
+            const badge = p.querySelector('.package-badge');
+            if (badge) {
+              badge.style.display = 'block';
+            }
+          }
+        });
+      } else {
+        alert('Please select a package');
+      }
+    });
+  }
+}
+
 // Expose functions globally
 window.getCrystals = getCrystals;
 window.addCrystals = addCrystals;
@@ -133,3 +226,4 @@ window.hasUsedFreeDeepStory = hasUsedFreeDeepStory;
 window.markFreeDeepStoryUsed = markFreeDeepStoryUsed;
 window.resetFreeDeepStory = resetFreeDeepStory;
 window.getRemaineFreeDeepStoryViews = getRemaineFreeDeepStoryViews;
+window.initCrystalShop = initCrystalShop;
