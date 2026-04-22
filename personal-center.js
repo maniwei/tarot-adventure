@@ -322,7 +322,6 @@ function renderStorys () {
 // Render unlocked adventure maps
 function renderMaps() {
     if (!unlockMaps) return;
-    
     // Get unlocked maps from localStorage
     const unlockedMaps = getUnlockedContent('adventureMaps');
     

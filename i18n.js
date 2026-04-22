@@ -10,6 +10,7 @@ const translations = {
     luckyDraw: "Lucky Draw",
     dailyInspiration: "Daily Inspiration",
     signIn: "Sign In",
+    personalCenter: "Personal Center",
 
     // Hero
     heroTitle: "Discover Harmony Through Tarot",

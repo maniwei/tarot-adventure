@@ -244,6 +244,23 @@ function handleDrawCards() {
         `).join('');
     }
 
+    // Check if free reading has been used
+    const freeReadingUsed = localStorage.getItem('tarot_free_reading_used') === 'true';
+    
+    if (freeReadingUsed) {
+        // Hide the button if free reading already used
+        if (getReadingBtn) {
+            getReadingBtn.style.display = 'none';
+        }
+    } else {
+        // First time - show button and mark as used
+        if (getReadingBtn) {
+            getReadingBtn.style.display = 'block';
+        }
+        // Mark free reading as used
+        localStorage.setItem('tarot_free_reading_used', 'true');
+    }
+
     // Simulate draw delay
     setTimeout(() => {
         const cards = getRandomCards(cardCount);
