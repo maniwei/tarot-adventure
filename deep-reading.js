@@ -11,7 +11,7 @@ let readingId = ''; // Unique ID for each reading
 
 // Deep reading storage
 const DEEP_READINGS_KEY = 'tarot_deep_readings';
-const DEEP_READING_COST = 2; // 2 crystals for full reading
+const DEEP_READING_COST = 3; // 3 crystals for full reading
 
 // Spread Configurations
 const SPREAD_CONFIG = {
@@ -247,17 +247,13 @@ function handleDrawCards() {
     // Check if free reading has been used
     const freeReadingUsed = localStorage.getItem('tarot_free_reading_used') === 'true';
     
-    if (freeReadingUsed) {
-        // Hide the button if free reading already used
-        if (getReadingBtn) {
-            getReadingBtn.style.display = 'none';
-        }
-    } else {
-        // First time - show button and mark as used
-        if (getReadingBtn) {
-            getReadingBtn.style.display = 'block';
-        }
-        // Mark free reading as used
+    if (getReadingBtn) {
+        getReadingBtn.style.display = 'block';
+        updateGetReadingButtonText();
+    }
+    
+    // Mark free reading as used on first draw
+    if (!freeReadingUsed) {
         localStorage.setItem('tarot_free_reading_used', 'true');
     }
 
@@ -308,13 +304,54 @@ function displayCards(cards) {
     `}).join('');
 }
 
+// Update Get Reading Button Text
+function updateGetReadingButtonText() {
+    const freeReadingUsed = localStorage.getItem('tarot_free_reading_used') === 'true';
+    const lang = localStorage.getItem('tarot-lang') || 'en';
+    if (getReadingBtn) {
+        if (freeReadingUsed) {
+            getReadingBtn.innerHTML = `Get a Deep Reading (${DEEP_READING_COST} 💎)`;
+        } else {
+            getReadingBtn.innerHTML = `Get a Deep Reading (Free First Time!)`;
+        }
+    }
+}
+
 // Handle Interpret
 function handleInterpret() {
     if (drawnCards.length === 0) return;
 
     const lang = localStorage.getItem('tarot-lang') || 'en';
+    const freeReadingUsed = localStorage.getItem('tarot_free_reading_used') === 'true';
 
     if (isLoading) return;
+
+    // Check crystals if not free
+    if (freeReadingUsed) {
+        const crystals = getCrystals ? getCrystals() : 0;
+        if (crystals < DEEP_READING_COST) {
+            const msg = lang === 'zu' ? 
+                `❌ 需要 ${DEEP_READING_COST} 个水晶才能解锁完整解读。您现在有 ${crystals} 个。` :
+                `❌ You need ${DEEP_READING_COST} crystals to unlock the full reading. You have ${crystals}.`;
+            alert(msg);
+            // Open crystal shop
+            const crystalShopModal = document.getElementById('crystalShopModal');
+            if (crystalShopModal) {
+                crystalShopModal.classList.add('active');
+                updateCrystalDisplay();
+            }
+            return;
+        }
+
+        // Spend crystals
+        if (spendCrystals) {
+            const result = spendCrystals(DEEP_READING_COST);
+            if (!result || !result.success) {
+                alert(lang === 'zu' ? '水晶不足！' : 'Not enough crystals!');
+                return;
+            }
+        }
+    }
 
     isLoading = true;
 
@@ -365,7 +402,8 @@ function handleInterpret() {
 
         isLoading = false;
         if (getReadingBtn) {
-            getReadingBtn.style.display = 'none';
+            getReadingBtn.disabled = false;
+            updateGetReadingButtonText();
         }
         if (tipButtonContainer) {
             tipButtonContainer.style.display = 'block';
