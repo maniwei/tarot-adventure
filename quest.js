@@ -39,12 +39,6 @@ function initQuest() {
   mobileMenuBtn = document.getElementById('mobileMenuBtn');
   mobileMenu = document.getElementById('mobileMenu');
   
-  // Modal Elements
-  modal = document.getElementById('crystalShopModal');
-  modalClose = document.getElementById('modalClose');
-  // modalBuyBtn = document.getElementById('modalBuyBtn');
-  packages = modal?.querySelectorAll('.package');
-  
   updateCrystalDisplay();
   loadLanguage();
   updateMapButtons();
@@ -63,30 +57,19 @@ function initQuest() {
     });
   }
   // unlockStoryBtn is now handled per-card via card-unlock-btn
-  if (buyCrystalsBtn) buyCrystalsBtn.addEventListener('click', openCrystalShop);
-  // if (crystalBtn) crystalBtn.addEventListener('click', openCrystalShop);
+  if (buyCrystalsBtn) buyCrystalsBtn.addEventListener('click', openCrystalShop); // uses global openCrystalShop
   if (shareBtn) shareBtn.addEventListener('click', handleShare);
   if (mobileMenuBtn) mobileMenuBtn.addEventListener('click', toggleMobileMenu);
-  // if (modalClose) modalClose.addEventListener('click', closeCrystalShop);
-  // if (modalBuyBtn) modalBuyBtn.addEventListener('click', handlePurchase);
 
   // Map unlock buttons
   document.querySelectorAll('.btn-map-unlock').forEach(btn => {
     btn.addEventListener('click', () => handleUnlockMap(btn));
   });
 
-  // Package selection
-  document.querySelectorAll('.package').forEach(pkg => {
-    pkg.addEventListener('click', () => selectPackage(pkg));
-  });
-
   // Language switchers
   document.querySelectorAll('.lang-btn, .mobile-lang-btn').forEach(btn => {
     btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
   });
-
-  // Close modal on overlay click
-  // document.querySelector('.modal-overlay')?.addEventListener('click', closeCrystalShop);
 }
 
 // Load saved language
@@ -625,56 +608,6 @@ function toggleMobileMenu() {
   mobileMenu?.classList.toggle('active');
 }
 
-// Crystal Shop
-let selectedPackage = null;
-
-function openCrystalShop() {
-  if (modal) {
-    modal.classList.add('active');
-    updateCrystalDisplay();
-    packages.forEach(p => {
-      p.classList.remove('selected');
-      if (p.dataset.package === '10') { 
-        p.classList.add('popular');
-        const badge = p.querySelector('.package-badge');
-        if (badge) {
-          badge.style.display = 'block';
-        }
-      }
-    });
-  }
-}
-
-// function closeCrystalShop() {
-//   if (modal) {
-//     modal.classList.remove('active');
-//     selectedPackage = null;
-//     document.querySelectorAll('.package').forEach(p => p.classList.remove('selected'));
-//   }
-// }
-
-// function selectPackage(pkg) {
-//   document.querySelectorAll('.package').forEach(p => p.classList.remove('selected'));
-//   pkg.classList.add('selected');
-//   selectedPackage = pkg.dataset.package;
-// }
-
-// function handlePurchase() {
-//   if (!selectedPackage) {
-//     const lang = localStorage.getItem('tarot-lang') || 'en';
-//     alert(lang === 'zu' ? 'Sicela ukhethe iphakheji' : 'Please select a package');
-//     return;
-//   }
-
-//   // Simulate purchase
-//   addCrystals(parseInt(selectedPackage));
-
-//   const lang = localStorage.getItem('tarot-lang') || 'en';
-//   alert((lang === 'zu' ? 'Kungeziwe amakristali angama-' : 'Added ') + selectedPackage + ' crystals!');
-
-//   closeCrystalShop();
-// }
-
 // Get random cards
 function getRandomCards(count) {
   const shuffled = [...tarotCards].sort(() => Math.random() - 0.5);
@@ -684,5 +617,5 @@ function getRandomCards(count) {
 // Initialize on load
 document.addEventListener('DOMContentLoaded', () => {
   initQuest();
-  initCrystalShop();
+  // initCrystalShop() is now handled globally by crystal-store.js
 });

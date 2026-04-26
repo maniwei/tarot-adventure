@@ -285,48 +285,8 @@ function toggleMobileMenu() {
     mobileMenu?.classList.toggle('active');
 }
 
-// Crystal Shop Functions
-let selectedPackage = null;
-
-// function openCrystalShop() {
-//     if (crystalShopModal) {
-//         crystalShopModal.classList.add('active');
-//         updateCrystalDisplay();
-//     }
-// }
-
-function closeCrystalShop() {
-    if (crystalShopModal) {
-        crystalShopModal.classList.remove('active');
-        selectedPackage = null;
-        document.querySelectorAll('.package').forEach(p => p.classList.remove('selected'));
-    }
-}
-
-// function selectPackage(pkg) {
-//     document.querySelectorAll('.package').forEach(p => p.classList.remove('selected'));
-//     pkg.classList.add('selected');
-//     selectedPackage = pkg.dataset.package;
-// }
-
-// function handleCrystalPurchase() {
-//     const lang = localStorage.getItem('tarot-lang') || 'en';
-
-//     if (!selectedPackage) {
-//         alert(getTranslation(lang, 'selectPackage') || 'Please select a package');
-//         return;
-//     }
-
-//     // Simulate purchase
-//     addCrystals(parseInt(selectedPackage));
-
-//     alert((lang === 'zu' ? 'Kungeziwe amakristali angama-' : 'Added ') + selectedPackage + ' crystals!');
-
-//     closeCrystalShop();
-// }
-
 // Initialize on load
 document.addEventListener('DOMContentLoaded', () => {
     initCardLibrary();
-    initCrystalShop();
+    // initCrystalShop() is now handled globally by crystal-store.js
 });

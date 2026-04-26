@@ -95,6 +95,7 @@ function resetUnlocks() {
 // Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
   updateCrystalDisplay();
+  initCrystalShop();
 });
 
 // ==================== Free Deep Story Management ====================
@@ -120,6 +121,40 @@ function getRemaineFreeDeepStoryViews() {
   return hasUsedFreeDeepStory() ? 0 : 1;
 }
 
+// 全局变量，用于跟踪选中的套餐
+let selectedPackage = null;
+
+// 打开水晶商店弹窗的通用函数
+function openCrystalShop() {
+  const modal = document.getElementById('crystalShopModal');
+  const packages = modal?.querySelectorAll('.package');
+  
+  if (modal) {
+    modal.classList.add('active');
+    updateCrystalDisplay();
+    selectedPackage = '10'; // 默认选中 10 个水晶的套餐
+    if (packages) {
+      packages.forEach(p => {
+        p.classList.remove('selected');
+        if (p.dataset.package === '10') { 
+          p.classList.add('selected'); // 真正选中这个套餐
+          p.classList.add('popular');
+          const badge = p.querySelector('.package-badge');
+          if (badge) {
+            badge.style.display = 'block';
+          }
+        } else {
+          p.classList.remove('popular');
+          const badge = p.querySelector('.package-badge');
+          if (badge) {
+            badge.style.display = 'none';
+          }
+        }
+      });
+    }
+  }
+}
+
 function initCrystalShop() {
   const crystalBtn = document.getElementById('crystalBtn');
   const modal = document.getElementById('crystalShopModal');
@@ -128,23 +163,8 @@ function initCrystalShop() {
   const packages = modal?.querySelectorAll('.package');
   const buyBtn = modal?.querySelector('.modal-buy-btn');
 
-  let selectedPackage = null;
-
   if (crystalBtn && modal) {
-    crystalBtn.addEventListener('click', () => {
-      modal.classList.add('active');
-      updateCrystalDisplay();
-      packages.forEach(p => {
-        p.classList.remove('selected');
-        if (p.dataset.package === '10') { 
-          p.classList.add('popular');
-          const badge = p.querySelector('.package-badge');
-          if (badge) {
-            badge.style.display = 'block';
-          }
-        }
-      });
-    });
+    crystalBtn.addEventListener('click', openCrystalShop);
   }
 
   if (modalClose) {
@@ -196,16 +216,18 @@ function initCrystalShop() {
         alert(`Added ${selectedPackage} crystals!`);
         modal.classList.remove('active');
         selectedPackage = null;
-        packages.forEach(p => {
-          p.classList.remove('selected');
-          if (p.dataset.package === '10') { 
-            p.classList.add('popular');
-            const badge = p.querySelector('.package-badge');
-            if (badge) {
-              badge.style.display = 'block';
+        if (packages) {
+          packages.forEach(p => {
+            p.classList.remove('selected');
+            if (p.dataset.package === '10') { 
+              p.classList.add('popular');
+              const badge = p.querySelector('.package-badge');
+              if (badge) {
+                badge.style.display = 'block';
+              }
             }
-          }
-        });
+          });
+        }
       } else {
         alert('Please select a package');
       }
@@ -227,3 +249,4 @@ window.markFreeDeepStoryUsed = markFreeDeepStoryUsed;
 window.resetFreeDeepStory = resetFreeDeepStory;
 window.getRemaineFreeDeepStoryViews = getRemaineFreeDeepStoryViews;
 window.initCrystalShop = initCrystalShop;
+window.openCrystalShop = openCrystalShop;

@@ -83,10 +83,7 @@ const crystalBtn = document.getElementById('crystalBtn');
 const mobileMenuBtn = document.getElementById('mobileMenuBtn');
 const mobileMenu = document.getElementById('mobileMenu');
 
-// Crystal Shop Modal Elements
-const crystalShopModal = document.getElementById('crystalShopModal');
-const modalClose = document.getElementById('modalClose');
-const modalBuyBtn = document.getElementById('modalBuyBtn');
+// Crystal shop functionality is now handled globally in crystal-store.js
 
 // Initialize
 function initDeepReading() {
@@ -130,25 +127,18 @@ function initDeepReading() {
         btn.addEventListener('click', () => selectTipAmount(btn));
     });
 
-    // Crystal shop
-    // if (modalClose) modalClose.addEventListener('click', closeCrystalShop);
-    // if (modalBuyBtn) modalBuyBtn.addEventListener('click', handleCrystalPurchase);
-
-    // Package selection
-    document.querySelectorAll('.package').forEach(pkg => {
-        pkg.addEventListener('click', () => selectPackage(pkg));
-    });
+    // Crystal shop functions are now handled in crystal-store.js, so no need to duplicate here
 
     // Language switchers
     document.querySelectorAll('.lang-btn, .mobile-lang-btn').forEach(btn => {
         btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
     });
 
-    // Close modals on overlay click
+    // Close modals on overlay click - crystal shop is now handled in crystal-store.js
     document.querySelectorAll('.modal-overlay').forEach(overlay => {
         overlay.addEventListener('click', () => {
             closeTipModal();
-            closeCrystalShop();
+            // closeCrystalShop() is now handled in crystal-store.js
         });
     });
 }
@@ -334,11 +324,9 @@ function handleInterpret() {
                 `❌ 需要 ${DEEP_READING_COST} 个水晶才能解锁完整解读。您现在有 ${crystals} 个。` :
                 `❌ You need ${DEEP_READING_COST} crystals to unlock the full reading. You have ${crystals}.`;
             alert(msg);
-            // Open crystal shop
-            const crystalShopModal = document.getElementById('crystalShopModal');
-            if (crystalShopModal) {
-                crystalShopModal.classList.add('active');
-                updateCrystalDisplay();
+            // Open crystal shop using the shared function
+            if (openCrystalShop) {
+                openCrystalShop();
             }
             return;
         }
@@ -528,45 +516,7 @@ function toggleMobileMenu() {
     mobileMenu?.classList.toggle('active');
 }
 
-// Crystal Shop Functions
-// let selectedPackage = null;
-
-// function openCrystalShop() {
-//     if (crystalShopModal) {
-//         crystalShopModal.classList.add('active');
-//         updateCrystalDisplay();
-//     }
-// }
-
-// function closeCrystalShop() {
-//     if (crystalShopModal) {
-//         crystalShopModal.classList.remove('active');
-//         selectedPackage = null;
-//         document.querySelectorAll('.package').forEach(p => p.classList.remove('selected'));
-//     }
-// }
-
-// function selectPackage(pkg) {
-//     document.querySelectorAll('.package').forEach(p => p.classList.remove('selected'));
-//     pkg.classList.add('selected');
-//     selectedPackage = pkg.dataset.package;
-// }
-
-// function handleCrystalPurchase() {
-//     const lang = localStorage.getItem('tarot-lang') || 'en';
-
-//     if (!selectedPackage) {
-//         alert(getTranslation(lang, 'selectPackage') || 'Please select a package');
-//         return;
-//     }
-
-//     // Simulate purchase
-//     addCrystals(parseInt(selectedPackage));
-
-//     alert((lang === 'zu' ? 'Kungeziwe amakristali angama-' : 'Added ') + selectedPackage + ' crystals!');
-
-//     closeCrystalShop();
-// }
+// Crystal shop functions are now handled globally in crystal-store.js
 
 // Get stored deep readings
 function getStoredReadings() {
@@ -696,5 +646,5 @@ function getRandomCards(count) {
 // Initialize on load
 document.addEventListener('DOMContentLoaded', () => {
     initDeepReading();
-    initCrystalShop();
+    // initCrystalShop() is now handled globally by crystal-store.js
 });

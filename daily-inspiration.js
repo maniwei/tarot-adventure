@@ -92,14 +92,8 @@ const articleDate = document.getElementById('articleDate');
 const articleTitle = document.getElementById('articleTitle');
 const articleContent = document.getElementById('articleContent');
 const backToNews = document.getElementById('backToNews');
-const crystalBtn = document.getElementById('crystalBtn');
 const mobileMenuBtn = document.getElementById('mobileMenuBtn');
 const mobileMenu = document.getElementById('mobileMenu');
-
-// Crystal Shop Modal Elements
-const crystalShopModal = document.getElementById('crystalShopModal');
-const modalClose = document.getElementById('modalClose');
-const modalBuyBtn = document.getElementById('modalBuyBtn');
 
 // Initialize
 function initDailyInspiration() {
@@ -118,10 +112,6 @@ function initDailyInspiration() {
         backToNews.addEventListener('click', () => switchTab('news'));
     }
 
-    if (crystalBtn) {
-        crystalBtn.addEventListener('click', openCrystalShop);
-    }
-
     if (mobileMenuBtn) {
         mobileMenuBtn.addEventListener('click', toggleMobileMenu);
     }
@@ -136,20 +126,6 @@ function initDailyInspiration() {
                 switchTab(tab);
             }
         });
-    });
-
-    // Crystal shop
-    if (modalClose) {
-        modalClose.addEventListener('click', closeCrystalShop);
-    }
-
-    if (modalBuyBtn) {
-        modalBuyBtn.addEventListener('click', handleCrystalPurchase);
-    }
-
-    // Package selection
-    document.querySelectorAll('.package').forEach(pkg => {
-        pkg.addEventListener('click', () => selectPackage(pkg));
     });
 
     // Language switchers
@@ -326,46 +302,6 @@ function getTranslation(lang, key) {
 // Mobile Menu
 function toggleMobileMenu() {
     mobileMenu?.classList.toggle('active');
-}
-
-// Crystal Shop Functions
-let selectedPackage = null;
-
-function openCrystalShop() {
-    if (crystalShopModal) {
-        crystalShopModal.classList.add('active');
-        updateCrystalDisplay();
-    }
-}
-
-function closeCrystalShop() {
-    if (crystalShopModal) {
-        crystalShopModal.classList.remove('active');
-        selectedPackage = null;
-        document.querySelectorAll('.package').forEach(p => p.classList.remove('selected'));
-    }
-}
-
-function selectPackage(pkg) {
-    document.querySelectorAll('.package').forEach(p => p.classList.remove('selected'));
-    pkg.classList.add('selected');
-    selectedPackage = pkg.dataset.package;
-}
-
-function handleCrystalPurchase() {
-    const lang = localStorage.getItem('tarot-lang') || 'en';
-
-    if (!selectedPackage) {
-        alert(getTranslation(lang, 'selectPackage') || 'Please select a package');
-        return;
-    }
-
-    // Simulate purchase
-    addCrystals(parseInt(selectedPackage));
-
-    alert((lang === 'zu' ? 'Kungeziwe amakristali angama-' : 'Added ') + selectedPackage + ' crystals!');
-
-    closeCrystalShop();
 }
 
 // Initialize on load
